@@ -5,6 +5,7 @@
 #include "lcd_app.h"
 #include "drv_ili9341_lcd.h"
 
+/*设置背景和字体颜色*/
 static rt_err_t lcd_setcolors(int argc, char *argv[])
 {		
 	if(!rt_strcmp(argv[1],"WHITE"))
@@ -107,4 +108,31 @@ static void lcd_Circle(int argc, char *argv[])
 	ILI9341_DrawCircle ( atoi(argv[1]) , atoi(argv[2]) , atoi(argv[3]) , atoi(argv[4]));
 }
 MSH_CMD_EXPORT(lcd_Circle, paint a Circle on the LCD <usX_Center|usY_Center|usRadius|full?>);
+
+/*设置字符大小*/
+static void lcd_Wordsize(int argc, char *argv[])
+{	
+	if(atoi(argv[1])==3)
+	{
+		LCD_SetFont(&Font24x32);
+	}
+	else if(atoi(argv[1])==2)
+	{
+		LCD_SetFont(&Font16x24);
+	}
+	else
+	{
+		LCD_SetFont(&Font8x16);		
+	}
+}
+MSH_CMD_EXPORT(lcd_Wordsize, set the size of words on LCD <size(1,2,3)>);
+
+/*打印一串字符*/
+static void lcd_Printf(int argc, char *argv[])
+{	
+	ILI9341_DispStringLine_EN (  LINE(atoi(argv[1])),  argv[2] );
+}
+MSH_CMD_EXPORT(lcd_Printf, print string on LCD in setting line <line No.|words>);
+
+
 

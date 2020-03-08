@@ -5,8 +5,9 @@
 #include <rtdevice.h>
 #include <board.h>
 
+#include "fonts.h"
 #include "stm32f1xx_hal.h"
-#include "drv_gpio.h"
+
 /******控制信号线******/
 //片选
 #define ILI9341_CS GET_PIN(C, 4)
@@ -59,6 +60,9 @@
 #define DEBUG_DELAY() ILI9341_Delay(0xFFFF)         
 
 /***************************** ILI934 显示区域的起始坐标和总行列数 ***************************/
+#define      ILI9341_DispWindow_X_Star		    0     //起始点的X坐标
+#define      ILI9341_DispWindow_Y_Star		    0     //起始点的Y坐标
+
 
 #define ILI9341_LESS_PIXEL 240			//液晶屏较短方向的像素宽度
 #define ILI9341_MORE_PIXEL 320			//液晶屏较长方向的像素宽度
@@ -106,9 +110,15 @@ void ILI9341_DrawRectangle ( uint16_t usX_Start, uint16_t usY_Start, uint16_t us
 void ILI9341_DrawCircle ( uint16_t usX_Center, uint16_t usY_Center, uint16_t usRadius, uint8_t ucFilled );
 
 uint16_t ILI9341_GetPointPixel ( uint16_t usX, uint16_t usY );
-
 uint16_t ILI9341_Read_ID(void);
 
+void ILI9341_DispStringLine_EN (  uint16_t line,  char * pStr );
+void ILI9341_DispString_EN ( 	uint16_t usX ,uint16_t usY,  char * pStr );
+void ILI9341_DispString_EN_YDir (	 uint16_t usX,uint16_t usY ,  char * pStr );
+void LCD_SetFont(sFONT *fonts);
+void LCD_ClearLine(uint16_t Line);
+
+sFONT *LCD_GetFont(void);
 
 
 //C99语法下内联函数的特殊使用
