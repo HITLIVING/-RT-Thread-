@@ -12,11 +12,13 @@
 #include <rtdevice.h>
 #include <board.h>
 
-#include <flash_app.h>
+#include "flash_app.h"
+#include "ili9341_lcd.h"
 
 int main(void)
 {	
 	rt_hw_spi_flash_init();
+	ILI9341_Init ();
 }
 
 

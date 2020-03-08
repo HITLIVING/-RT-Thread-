@@ -1,7 +1,7 @@
 [PreviousGenFiles]
-HeaderPath=E:/Function_LIB/RTT_WORK/rt-thread/bsp/stm32/stm32f103_Fire_MINI/board/CubeMX_Config/Inc
+HeaderPath=E:/Function_LIB/RTT_WORK/-RT-Thread-/rt-thread/bsp/stm32/stm32f103_Fire_MINI/board/CubeMX_Config/Inc
 HeaderFiles=stm32f1xx_it.h;stm32f1xx_hal_conf.h;main.h;
-SourcePath=E:/Function_LIB/RTT_WORK/rt-thread/bsp/stm32/stm32f103_Fire_MINI/board/CubeMX_Config/Src
+SourcePath=E:/Function_LIB/RTT_WORK/-RT-Thread-/rt-thread/bsp/stm32/stm32f103_Fire_MINI/board/CubeMX_Config/Src
 SourceFiles=stm32f1xx_it.c;stm32f1xx_hal_msp.c;main.c;
 
 [PreviousLibFiles]

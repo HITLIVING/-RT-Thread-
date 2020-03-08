@@ -477,6 +477,11 @@
               <FileType>1</FileType>
               <FilePath>applications\rtc_app.c</FilePath>
             </File>
+            <File>
+              <FileName>ili9341_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\ili9341_lcd.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -657,7 +662,7 @@
                   <MiscControls> --c99</MiscControls>
                   <Define> </Define>
                   <Undefine> </Undefine>
-                  <IncludePath> </IncludePath>
+                  <IncludePath></IncludePath>
                 </VariousControls>
               </Cads>
               <Aads>
