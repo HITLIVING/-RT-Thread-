@@ -3,7 +3,7 @@
 #include <board.h>
 
 #include "stm32f1xx_hal.h"
-#include "ili9341_lcd.h"
+#include "drv_ili9341_lcd.h"
 
 //根据液晶扫描方向而变化的XY像素宽度
 //调用ILI9341_GramScan函数设置方向时会自动更改
@@ -16,8 +16,8 @@ uint16_t LCD_Y_LENGTH = ILI9341_MORE_PIXEL;
 //LCD刚初始化完成时会使用本默认值
 uint8_t LCD_SCAN_MODE = 6;
 
-static uint16_t CurrentTextColor   = BLACK;//前景色
-static uint16_t CurrentBackColor   = WHITE;//背景色
+static uint16_t CurrentTextColor   = BLUE_SPE;//前景色
+static uint16_t CurrentBackColor   = BLACK;//背景色
 
 
 /**
@@ -45,6 +45,7 @@ static void ILI9341_Pin_Config ( void )
 	rt_pin_mode(ILI9341_RD, PIN_MODE_OUTPUT);
 	rt_pin_mode(ILI9341_BK, PIN_MODE_OUTPUT);
 	
+	rt_pin_mode(ILI9341_D0, PIN_MODE_OUTPUT);
 	rt_pin_mode(ILI9341_D1, PIN_MODE_OUTPUT);
 	rt_pin_mode(ILI9341_D2, PIN_MODE_OUTPUT);
 	rt_pin_mode(ILI9341_D3, PIN_MODE_OUTPUT);
@@ -231,7 +232,6 @@ static void ILI9341_REG_Config ( void )
 uint16_t ILI9341_Read_ID(void)
 {
 	uint16_t id = 0;
-	
 	ILI9341_Write_Cmd(0xD3);
 	ILI9341_Read_Data();
 	ILI9341_Read_Data();

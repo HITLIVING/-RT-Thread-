@@ -13,12 +13,15 @@
 #include <board.h>
 
 #include "flash_app.h"
-#include "ili9341_lcd.h"
+#include "drv_ili9341_lcd.h"
 
 int main(void)
 {	
+	/* Flash芯片文件系统初始化 */
 	rt_hw_spi_flash_init();
+	/* LCD显示屏初始化 */
 	ILI9341_Init ();
+	ILI9341_Clear (0, 0, 240, 320);
 }
 
 

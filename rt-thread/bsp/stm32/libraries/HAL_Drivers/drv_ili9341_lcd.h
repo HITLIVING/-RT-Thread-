@@ -6,10 +6,10 @@
 #include <board.h>
 
 #include "stm32f1xx_hal.h"
-
+#include "drv_gpio.h"
 /******控制信号线******/
 //片选
-#define ILI9341_CS GET_PIN(C, 2)
+#define ILI9341_CS GET_PIN(C, 4)
 //数据控制切换
 #define ILI9341_DC GET_PIN(C, 7)
 //写使能
@@ -19,13 +19,13 @@
 //背光
 #define ILI9341_BK GET_PIN(D, 2)
 
-//控制线写入
+////控制线写入
 #define	ILI9341_CS_SET rt_pin_write(ILI9341_CS, PIN_HIGH);
 #define	ILI9341_DC_SET rt_pin_write(ILI9341_DC, PIN_HIGH);
 #define	ILI9341_WR_SET rt_pin_write(ILI9341_WR, PIN_HIGH);
 #define	ILI9341_RD_SET rt_pin_write(ILI9341_RD, PIN_HIGH);
 #define	ILI9341_BK_SET rt_pin_write(ILI9341_BK, PIN_HIGH);
-						
+//						
 #define	ILI9341_CS_CLR rt_pin_write(ILI9341_CS, PIN_LOW);
 #define	ILI9341_DC_CLR rt_pin_write(ILI9341_DC, PIN_LOW);
 #define	ILI9341_WR_CLR rt_pin_write(ILI9341_WR, PIN_LOW);
@@ -33,6 +33,7 @@
 #define	ILI9341_BK_CLR rt_pin_write(ILI9341_BK, PIN_LOW);
 
 /********数据信号线***************/
+#define ILI9341_D0 GET_PIN(B, 0)
 #define ILI9341_D1 GET_PIN(B, 1)
 #define ILI9341_D2 GET_PIN(B, 2)
 #define ILI9341_D3 GET_PIN(B, 3)
@@ -73,15 +74,16 @@ extern uint8_t LCD_SCAN_MODE;
 #define      BLACK      0x0000	   //黑色 
 #define      GREY       0xF7DE	   //灰色 
 #define      BLUE       0x001F	   //蓝色 
-#define      BLUE2      0x051F	   //浅蓝色 
+#define      BLUE2      0x051F	   //浅蓝色
+#define		 BLUE_SPE	0x07FF	   //特殊蓝
 #define      RED        0xF800	   //红色 
 #define      MAGENTA    0xF81F	   //红紫色，洋红色 
 #define      GREEN      0x07E0	   //绿色 
 #define      CYAN       0x7FFF	   //蓝绿色，青色 
 #define      YELLOW     0xFFE0	   //黄色 
-#define      BRED       0xF81F
-#define      GRED       0xFFE0
-#define      GBLUE      0x07FF
+#define      BRED       0xF81F	   //紫色
+#define      GRED       0xFFE0	   //蛋黄
+#define      GBLUE      0x07FF	   //天蓝色
 
 /******************************* 定义 ILI934 常用命令 ********************************/
 #define      CMD_SetCoordinateX		 		    0x2A	     //设置X坐标
@@ -94,6 +96,7 @@ void LCD_SetBackColor(uint16_t Color);
 void LCD_SetColors(uint16_t TextColor, uint16_t BackColor); 
 void LCD_GetColors(uint16_t *TextColor, uint16_t *BackColor);
 
+void ILI9341_GramScan ( uint8_t ucOption );
 void ILI9341_OpenWindow ( uint16_t usX, uint16_t usY, uint16_t usWidth, uint16_t usHeight );
 void ILI9341_Clear ( uint16_t usX, uint16_t usY, uint16_t usWidth, uint16_t usHeight );
 void ILI9341_SetPointPixel ( uint16_t usX, uint16_t usY );	
@@ -104,11 +107,12 @@ void ILI9341_DrawCircle ( uint16_t usX_Center, uint16_t usY_Center, uint16_t usR
 
 uint16_t ILI9341_GetPointPixel ( uint16_t usX, uint16_t usY );
 
-
+uint16_t ILI9341_Read_ID(void);
 
 
 
 //C99语法下内联函数的特殊使用
+
 extern __inline void                 ILI9341_Write_Cmd           ( uint16_t usCmd );
 extern __inline void                 ILI9341_Write_Data          ( uint16_t usData );
 extern __inline uint16_t             ILI9341_Read_Data           ( void );

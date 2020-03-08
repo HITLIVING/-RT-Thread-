@@ -54,7 +54,7 @@
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
-          <BrowseInformation>0</BrowseInformation>
+          <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\build\keil\List\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -478,9 +478,9 @@
               <FilePath>applications\rtc_app.c</FilePath>
             </File>
             <File>
-              <FileName>ili9341_lcd.c</FileName>
+              <FileName>lcd_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\ili9341_lcd.c</FilePath>
+              <FilePath>.\applications\lcd_app.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -526,6 +526,11 @@
               <FileName>drv_common.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\libraries\HAL_Drivers\drv_common.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_ili9341_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\HAL_Drivers\drv_ili9341_lcd.c</FilePath>
             </File>
           </Files>
         </Group>
