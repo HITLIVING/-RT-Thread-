@@ -1,0 +1,62 @@
+menu "Hardware Drivers Config"
+
+config SOC_STM32F103RC
+    bool
+    select SOC_SERIES_STM32F1
+    select RT_USING_COMPONENTS_INIT
+    select RT_USING_USER_MAIN
+    default y
+
+menu "Onboard Peripheral Drivers"
+
+    config BSP_USING_USB_TO_USART
+        bool "Enable USB TO USART (uart1)"
+        select BSP_USING_UART1
+        default y
+
+endmenu
+
+menu "On-chip Peripheral Drivers"
+
+    config BSP_USING_GPIO
+        bool "Enable GPIO"
+        select RT_USING_PIN
+        default y
+
+    config BSP_USING_UART1
+        bool "Enable UART1"
+        select RT_USING_SERIAL
+        default y
+
+    config BSP_USING_SPI1
+        bool "Enable SPI1 BUS"
+        select RT_USING_SPI
+        default y	
+
+    menuconfig BSP_USING_ONCHIP_RTC
+        bool "Enable RTC"
+        select RT_USING_RTC
+        select RT_USING_LIBC
+        default n
+        if BSP_USING_ONCHIP_RTC
+            choice
+                prompt "Select clock source"
+                default BSP_RTC_USING_LSE
+
+                config BSP_RTC_USING_LSE
+                    bool "RTC USING LSE"
+
+                config BSP_RTC_USING_LSI
+                    bool "RTC USING LSI"
+            endchoice
+        endif
+
+    source "../libraries/HAL_Drivers/Kconfig"
+       
+endmenu
+
+menu "Board extended module Drivers"
+
+endmenu
+
+endmenu
