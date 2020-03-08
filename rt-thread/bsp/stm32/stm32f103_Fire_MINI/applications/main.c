@@ -14,6 +14,7 @@
 
 #include "flash_app.h"
 #include "drv_ili9341_lcd.h"
+#include "drv_xpt2049_lcd.h"
 
 int main(void)
 {	
@@ -21,7 +22,8 @@ int main(void)
 	rt_hw_spi_flash_init();
 	/* LCD显示屏初始化 */
 	ILI9341_Init ();
-	
+	/* 触摸板初始化 */
+	XPT2046_Init ();
 }
 
 

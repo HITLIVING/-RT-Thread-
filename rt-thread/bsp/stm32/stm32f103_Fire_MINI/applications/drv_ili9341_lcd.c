@@ -608,8 +608,7 @@ void ILI9341_DrawCircle ( uint16_t usX_Center, uint16_t usY_Center, uint16_t usR
 	while ( sCurrentX <= sCurrentY )
 	{
 		int16_t sCountY;
-		
-		
+				
 		if ( ucFilled ) 			
 			for ( sCountY = sCurrentX; sCountY <= sCurrentY; sCountY ++ ) 
 			{                      
