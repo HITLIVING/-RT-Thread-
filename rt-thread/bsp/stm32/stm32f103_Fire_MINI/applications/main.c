@@ -21,7 +21,7 @@ int main(void)
 	rt_hw_spi_flash_init();
 	/* LCDœ‘ æ∆¡≥ı ºªØ */
 	ILI9341_Init ();
-	ILI9341_Clear (0, 0, 240, 320);
+
 }
 
 
