@@ -1,18 +1,19 @@
 #ifndef __LCD_APP__
 #define __LCD_APP__
 
-
-void lcd_system_Init(void);
-void lcd_system_reset(void);
-
-void thread_main_init(void);
-
-
-
-
-
+enum MainSchStateType
+{
+	Interface_State,
+	
+	CheckTouch_State,
+	
+	Type_Num
+};
 
 
+void interface_system_Init(void);
+void interface_system_reset(void);
+void interface_time_show(void);
 
 
 

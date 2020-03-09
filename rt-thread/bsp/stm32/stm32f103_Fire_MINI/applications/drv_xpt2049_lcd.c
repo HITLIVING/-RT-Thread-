@@ -492,7 +492,7 @@ uint8_t XPT2046_Touch_Calibrate ( uint8_t LCD_Mode )
 		sprintf ( cStr, "%*c%d",((LCD_X_LENGTH/(((sFONT *)LCD_GetFont())->Width)) -1)/2,' ',i + 1 );
 		ILI9341_DispStringLine_EN (( LCD_Y_LENGTH >> 1 ) - (((sFONT *)LCD_GetFont())->Height), cStr ); 
 		
-		XPT2046_DelayUS ( 300000 );		                     //适当的延时很有必要
+		XPT2046_DelayUS ( 10000 );		                     //适当的延时很有必要
 			
 		ILI9341_DrawCross ( strCrossCoordinate[i] .x, strCrossCoordinate[i].y );  //显示校正用的“十”字
 
