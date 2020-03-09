@@ -24,6 +24,8 @@ int main(void)
 	ILI9341_Init ();
 	/* ´¥Ãþ°å³õÊ¼»¯ */
 	XPT2046_Init ();
+	
+	
 }
 
 

@@ -7,7 +7,6 @@
 #include "stm32f1xx_hal.h"
 
 /******************************* 声明 XPT2046 相关的静态函数 ***************************/
-static void                   XPT2046_DelayUS                       ( __IO uint32_t ulCount );
 static void                   XPT2046_WriteCMD                      ( uint8_t ucCmd );
 static uint16_t               XPT2046_ReadCMD                       ( void );
 static uint16_t               XPT2046_ReadAdc                       ( uint8_t ucChannel );
@@ -33,26 +32,6 @@ strType_XPT2046_TouchPara strXPT2046_TouchPara[] = {
 
 volatile uint8_t ucXPT2046_TouchFlag = 0;
 
-
-
-/**
-  * @brief  XPT2046 初始化函数
-  * @param  无
-  * @retval 无
-  */	
-void XPT2046_Init ( void )
-{
-	rt_pin_mode(XPT2046_PENIRQ, PIN_MODE_INPUT_PULLUP );
-	rt_pin_mode(XPT2046_SPI_CS, PIN_MODE_OUTPUT);
-	rt_pin_mode(XPT2046_SPI_CLK, PIN_MODE_OUTPUT);
-	rt_pin_mode(XPT2046_SPI_MOSI, PIN_MODE_OUTPUT);
-	rt_pin_mode(XPT2046_SPI_MISO, PIN_MODE_INPUT_PULLUP);
-	
-	XPT2046_CS_DISABLE();	
-}
-
-
-
 /**
   * @brief  用于 XPT2046 的简单微秒级延时函数
   * @param  nCount ：延时计数值，单位为微妙
@@ -61,19 +40,29 @@ void XPT2046_Init ( void )
 static void XPT2046_DelayUS ( __IO uint32_t ulCount )
 {
 	uint32_t i;
-
-
 	for ( i = 0; i < ulCount; i ++ )
 	{
 		uint8_t uc = 12;     //设置值为12，大约延1微秒  
 	      
 		while ( uc -- );     //延1微秒	
-
 	}
-	
 }
 
-
+/**
+  * @brief  XPT2046 初始化函数
+  * @param  无
+  * @retval 无
+  */	
+void XPT2046_Init ( void )
+{
+	rt_pin_mode(XPT2046_PENIRQ, PIN_MODE_INPUT);
+	rt_pin_mode(XPT2046_SPI_CS, PIN_MODE_OUTPUT);
+	rt_pin_mode(XPT2046_SPI_CLK, PIN_MODE_OUTPUT);
+	rt_pin_mode(XPT2046_SPI_MOSI, PIN_MODE_OUTPUT);
+	rt_pin_mode(XPT2046_SPI_MISO, PIN_MODE_INPUT);
+	
+	XPT2046_CS_DISABLE();	
+}
 
 /**
   * @brief  XPT2046 的写入命令
@@ -96,11 +85,11 @@ static void XPT2046_WriteCMD ( uint8_t ucCmd )
 	{
 		( ( ucCmd >> ( 7 - i ) ) & 0x01 ) ? XPT2046_MOSI_1() : XPT2046_MOSI_0();
 		
-	  XPT2046_DelayUS ( 5 );
+		XPT2046_DelayUS (5);
 		
 		XPT2046_CLK_HIGH();
 
-	  XPT2046_DelayUS ( 5 );
+		XPT2046_DelayUS (5);
 
 		XPT2046_CLK_LOW();
 	}
@@ -168,7 +157,7 @@ static void XPT2046_ReadAdc_XY ( int16_t * sX_Ad, int16_t * sY_Ad )
 	
 	sX_Ad_Temp = XPT2046_ReadAdc ( XPT2046_CHANNEL_X );
 
-	XPT2046_DelayUS ( 1 ); 
+	XPT2046_DelayUS ( 1 );
 
 	sY_Ad_Temp = XPT2046_ReadAdc ( XPT2046_CHANNEL_Y ); 
 	
@@ -296,7 +285,7 @@ static uint8_t XPT2046_ReadAdc_Smooth_XY ( strType_XPT2046_Coordinate * pScreenC
 }
 
 
-#else     //注意：画板应用实例专用,不是很精准，但是简单，速度比较快   
+#else     //注意：画板应用实例专用,不是很精准，但是简单，速度比较快
 static uint8_t XPT2046_ReadAdc_Smooth_XY ( strType_XPT2046_Coordinate * pScreenCoordinate )
 {
 	uint8_t ucCount = 0, i;
@@ -544,7 +533,11 @@ uint8_t XPT2046_Touch_Calibrate ( uint8_t LCD_Mode )
 	sprintf(cStr,"%*c%s",((LCD_X_LENGTH/(((sFONT *)LCD_GetFont())->Width))-strlen(pStr))/2,' ',pStr)	;	
 	ILI9341_DispStringLine_EN (LCD_Y_LENGTH >> 1, cStr );	
 
-	XPT2046_DelayUS ( 1000000 );
+	rt_thread_mdelay(500);	
+	
+	/*恢复设置*/
+	LCD_SetColors(BLUE_SPE, BLACK);
+	ILI9341_Clear (0, 0, 240, 320);
 
 	return 1;    
 	

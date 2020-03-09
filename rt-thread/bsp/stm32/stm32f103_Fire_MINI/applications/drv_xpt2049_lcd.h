@@ -15,7 +15,7 @@
 #define	XPT2046_PENIRQ			GET_PIN(C, 12)
 
 //触屏信号有效电平
-#define XPT2046_PENIRQ_ActiveLevel 0
+#define XPT2046_PENIRQ_ActiveLevel 0 //0电平
 #define	XPT2046_PENIRQ_Read()	rt_pin_read(XPT2046_PENIRQ)
 
 
@@ -38,7 +38,7 @@
 #define XPT2046_MOSI_1()        rt_pin_write(XPT2046_SPI_MOSI, PIN_HIGH)   
 #define XPT2046_MOSI_0()        rt_pin_write(XPT2046_SPI_MOSI, PIN_LOW)  
 
-#define XPT2046_MISO()          rt_pin_read(XPT2046_SPI_MISO)
+#define XPT2046_MISO()          (rt_pin_read(XPT2046_SPI_MISO)==0x00000001?1:0)
 
 /******************************* XPT2046 触摸屏参数定义 ***************************/
 //校准触摸屏时触摸坐标的AD值相差门限 

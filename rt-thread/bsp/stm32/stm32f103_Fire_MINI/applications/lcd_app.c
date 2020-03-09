@@ -4,6 +4,7 @@
 
 #include "lcd_app.h"
 #include "drv_ili9341_lcd.h"
+#include "drv_xpt2049_lcd.h"
 
 /*设置背景和字体颜色*/
 static rt_err_t lcd_setcolors(int argc, char *argv[])
@@ -124,6 +125,9 @@ static void lcd_Wordsize(int argc, char *argv[])
 	{
 		LCD_SetFont(&Font8x16);		
 	}
+	
+	rt_kprintf("Watch is  %d\n",rt_pin_read(XPT2046_PENIRQ));
+	
 }
 MSH_CMD_EXPORT(lcd_Wordsize, set the size of words on LCD <size(1,2,3)>);
 
@@ -133,6 +137,26 @@ static void lcd_Printf(int argc, char *argv[])
 	ILI9341_DispStringLine_EN (  LINE(atoi(argv[1])),  argv[2] );
 }
 MSH_CMD_EXPORT(lcd_Printf, print string on LCD in setting line <line No.|words>);
+
+
+
+/*运行触摸屏校准*/
+static void touch_Check(int argc, char *argv[])
+{	
+	rt_uint32_t Mode_Num = atoi(argv[1]);
+	
+	rt_kprintf("LCD Touch Checking with Mode %d\n",Mode_Num);
+	if(Mode_Num>=1&&Mode_Num<=6)
+	{
+		XPT2046_Touch_Calibrate(Mode_Num);
+	}
+	else
+	{
+		XPT2046_Touch_Calibrate(6);
+	}
+}
+MSH_CMD_EXPORT(touch_Check, check the LCD touch function <mode No.>);
+
 
 
 

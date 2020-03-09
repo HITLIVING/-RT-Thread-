@@ -344,9 +344,9 @@ void ILI9341_Init ( void )
 	//LCD≥ı ºΩÁ√Ê≤‚ ‘
 	LCD_SetFont(&Font24x32);	
 	ILI9341_DispStringLine_EN (LINE(4),  "RT-Thread!");
-	rt_thread_mdelay(5000);	
-	ILI9341_DispStringLine_EN (LINE(5),  "Let'sDoIt!");
 	rt_thread_mdelay(1000);	
+	ILI9341_DispStringLine_EN (LINE(5),  "   Begin! ");
+	rt_thread_mdelay(500);	
 	ILI9341_Clear (0, 0, 240, 320);
 	LCD_SetFont(&Font8x16);
 }
