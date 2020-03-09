@@ -337,18 +337,7 @@ void ILI9341_Init ( void )
 	ILI9341_REG_Config ();
 	
 	//设置默认扫描方向，其中 6 模式为大部分液晶例程的默认显示方向  
-	ILI9341_GramScan(LCD_SCAN_MODE);
-	
-	ILI9341_Clear (0, 0, 240, 320);
-	
-	//LCD初始界面测试
-	LCD_SetFont(&Font24x32);	
-	ILI9341_DispStringLine_EN (LINE(4),  "RT-Thread!");
-	rt_thread_mdelay(1000);	
-	ILI9341_DispStringLine_EN (LINE(5),  "   Begin! ");
-	rt_thread_mdelay(500);	
-	ILI9341_Clear (0, 0, 240, 320);
-	LCD_SetFont(&Font8x16);
+	ILI9341_GramScan(LCD_SCAN_MODE);		
 }
 
 /**

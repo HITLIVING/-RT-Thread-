@@ -534,10 +534,6 @@ uint8_t XPT2046_Touch_Calibrate ( uint8_t LCD_Mode )
 	ILI9341_DispStringLine_EN (LCD_Y_LENGTH >> 1, cStr );	
 
 	rt_thread_mdelay(500);	
-	
-	/*ª÷∏¥…Ë÷√*/
-	LCD_SetColors(BLUE_SPE, BLACK);
-	ILI9341_Clear (0, 0, 240, 320);
 
 	return 1;    
 	

@@ -6,6 +6,87 @@
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
 
+
+//*************************私有函数***********************************
+static void lcd_main_time(void);
+
+char *time_string;
+static void lcd_main_time()
+{
+	/* 显示时间 */	       
+    time_t now = time(RT_NULL);
+    time_string = ctime(&now);
+	time_string[20] = '\0';
+	time_string[10] = ' ';
+	time_string+=10;
+	LCD_SetFont(&Font24x32);
+	ILI9341_DispStringLine_EN (LINE(4),time_string);
+	LCD_SetFont(&Font8x16);
+}
+
+//*************************调用函数***********************************
+
+void lcd_system_Init(void)
+{
+	ILI9341_Clear (0, 0, 240, 320);	
+	//LCD初始界面测试
+	LCD_SetFont(&Font24x32);	
+	ILI9341_DispStringLine_EN (LINE(4),  "RT-Thread!");
+	LCD_SetFont(&Font8x16);
+	ILI9341_DispStringLine_EN (LINE(19),  "V4.0.3 Operate System");
+	rt_thread_mdelay(1000);
+	lcd_system_reset();	
+}
+
+void lcd_system_reset(void)
+{
+	//重置设置
+	LCD_SetColors(BLUE_SPE, BLACK);
+	ILI9341_Clear (0, 0, 240, 320);
+	LCD_SetFont(&Font8x16);
+	ILI9341_DispStringLine_EN (LINE(19),  "[Mes] System is readey");
+}
+
+//****************************Main UI thread***********************************
+#define MAIN_THREAD_PRIORITY         25
+#define MAIN_THREAD_STACK_SIZE       1024
+#define MAIN_THREAD_TIMESLICE        100
+
+/* 线程 1 的入口函数 */
+static void thread_main_entry(void *parameter)
+{		
+	while(1)
+	{
+		rt_thread_mdelay(1000);	
+		lcd_main_time();		
+	}		
+}
+
+ALIGN(RT_ALIGN_SIZE)
+
+void thread_main_init(void)
+{
+	rt_thread_t thread_main_obj = RT_NULL;
+    /* 创建线程 1，名称是 thread1，入口是 thread1_entry*/
+    thread_main_obj = rt_thread_create("thread_main_LCD",
+                            thread_main_entry, RT_NULL,
+                            MAIN_THREAD_STACK_SIZE,
+                            MAIN_THREAD_PRIORITY, MAIN_THREAD_TIMESLICE);
+
+    /* 如果获得线程控制块，启动这个线程 */
+    if (thread_main_obj != RT_NULL)
+	{
+		rt_thread_startup(thread_main_obj);
+	}      
+	else
+	{
+		LCD_ClearLine(LINE(19));
+		ILI9341_DispStringLine_EN (LINE(19),  "[Error] Build main UI failed!");		
+	}
+}
+
+//***************************命令行控制*******************************
+
 /*设置背景和字体颜色*/
 static rt_err_t lcd_setcolors(int argc, char *argv[])
 {		
@@ -82,34 +163,6 @@ static rt_err_t lcd_setcolors(int argc, char *argv[])
 MSH_CMD_EXPORT(lcd_setcolors, LCD change color: <Background|Text>);
 
 
-/*读取屏幕ID*/
-static void lcd_ID(void)
-{
-	rt_kprintf("LCD ID is %d\n",ILI9341_Read_ID());
-}
-MSH_CMD_EXPORT(lcd_ID, LCD ID Check);
-
-/*绘制直线*/
-static void lcd_line(int argc, char *argv[])
-{	
-	ILI9341_DrawLine (atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]));
-}
-MSH_CMD_EXPORT(lcd_line, paint a line on the LCD <point1_x|point1_y|point2_x|point2_y>);
-
-/*绘制矩形*/
-static void lcd_Rectangle(int argc, char *argv[])
-{	
-	ILI9341_DrawRectangle (atoi(argv[1]), atoi(argv[2]), atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
-}
-MSH_CMD_EXPORT(lcd_Rectangle, paint a Rectangle on the LCD <point_x|point_y|width|height|full?>);
-
-/*绘制圆形*/
-static void lcd_Circle(int argc, char *argv[])
-{	
-	ILI9341_DrawCircle ( atoi(argv[1]) , atoi(argv[2]) , atoi(argv[3]) , atoi(argv[4]));
-}
-MSH_CMD_EXPORT(lcd_Circle, paint a Circle on the LCD <usX_Center|usY_Center|usRadius|full?>);
-
 /*设置字符大小*/
 static void lcd_Wordsize(int argc, char *argv[])
 {	
@@ -138,22 +191,23 @@ static void lcd_Printf(int argc, char *argv[])
 }
 MSH_CMD_EXPORT(lcd_Printf, print string on LCD in setting line <line No.|words>);
 
-
-
 /*运行触摸屏校准*/
 static void touch_Check(int argc, char *argv[])
 {	
 	rt_uint32_t Mode_Num = atoi(argv[1]);
 	
-	rt_kprintf("LCD Touch Checking with Mode %d\n",Mode_Num);
 	if(Mode_Num>=1&&Mode_Num<=6)
 	{
 		XPT2046_Touch_Calibrate(Mode_Num);
+		rt_kprintf("LCD Touch Checking with Mode %d\n",Mode_Num);
 	}
 	else
 	{
 		XPT2046_Touch_Calibrate(6);
+		rt_kprintf("LCD Touch Checking with Mode 6\n");
 	}
+	
+	lcd_system_reset();
 }
 MSH_CMD_EXPORT(touch_Check, check the LCD touch function <mode No.>);
 
