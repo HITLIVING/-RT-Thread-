@@ -463,29 +463,19 @@
               <FilePath>applications\main.c</FilePath>
             </File>
             <File>
-              <FileName>flash_app.c</FileName>
+              <FileName>schedule_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\flash_app.c</FilePath>
+              <FilePath>.\applications\schedule_app.c</FilePath>
             </File>
             <File>
-              <FileName>lcd_app.c</FileName>
+              <FileName>Interface_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\lcd_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>led_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\led_app.c</FilePath>
+              <FilePath>.\applications\Interface_app.c</FilePath>
             </File>
             <File>
               <FileName>rtc_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\rtc_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>fonts.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\fonts.c</FilePath>
             </File>
             <File>
               <FileName>drv_ili9341_lcd.c</FileName>
@@ -496,6 +486,26 @@
               <FileName>drv_xpt2049_lcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\drv_xpt2049_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_beep.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_beep.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_fonts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_fonts.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_led.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\drv_led.c</FilePath>
             </File>
           </Files>
         </Group>

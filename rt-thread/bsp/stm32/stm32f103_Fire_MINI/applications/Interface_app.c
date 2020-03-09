@@ -2,10 +2,10 @@
 #include <rtdevice.h>
 #include <board.h>
 
-#include "lcd_app.h"
+#include "interface_app.h"
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
-
+#include "drv_beep.h"
 
 //*************************Ë½ÓÐº¯Êý***********************************
 static void lcd_main_time(void);
@@ -44,6 +44,7 @@ void lcd_system_reset(void)
 	LCD_SetColors(BLUE_SPE, BLACK);
 	ILI9341_Clear (0, 0, 240, 320);
 	LCD_SetFont(&Font8x16);
+	beep_on_ms(100);
 	ILI9341_DispStringLine_EN (LINE(19),  "[Mes] System is readey");
 }
 

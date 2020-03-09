@@ -12,24 +12,34 @@
 #include <rtdevice.h>
 #include <board.h>
 
-#include "flash_app.h"
-#include "lcd_app.h"
+#include "interface_app.h"
+
+#include "drv_flash.h"
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
-
+#include "drv_beep.h"
+#include "drv_led.h"
 
 int main(void)
 {	
-	/* Flash芯片文件系统初始化 */
+	/********************Drive Init********************/
+	/* Flash elm-Fats init */
 	rt_hw_spi_flash_init();
-	/* LCD显示屏初始化 */
+	/* LCD drive init */
 	ILI9341_Init ();
-	/* 触摸板初始化 */
+	/* Touch screen drive init */
 	XPT2046_Init ();
-	/* LCD应用程序初始化 */
+	/* Beep drive init */
+	beep_init();
+	/* Led drive init */
+	LED_Init();
+	
+	/********************Application Init********************/
+	/* System boot screen init */
 	lcd_system_Init();	
-	/* 主界面初始化 */
+	/* System schedule init */
 	thread_main_init();
+
 	
 }
 

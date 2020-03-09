@@ -4,7 +4,7 @@
 
 #include "stm32f1xx_hal.h"
 #include "drv_ili9341_lcd.h"
-#include "fonts.h"
+#include "drv_fonts.h"
 
 //根据液晶扫描方向而变化的XY像素宽度
 //调用ILI9341_GramScan函数设置方向时会自动更改

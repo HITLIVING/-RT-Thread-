@@ -1,4 +1,4 @@
-#include <flash_app.h>
+#include <drv_flash.h>
 
 #include <drv_spi.h>
 #include <dfs_fs.h>
