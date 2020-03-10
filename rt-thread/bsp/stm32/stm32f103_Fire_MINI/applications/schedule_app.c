@@ -29,7 +29,6 @@ MainSch_State step_Interface(void)
 	/*Interface Application*/
 	interface_time_show();	
 	
-
 	return MainSchStep;
 }
 
@@ -39,18 +38,16 @@ MainSch_State step_CheckTouch(void)
 	if(Last_MainSchStep!=MainSchStep)
 	{
 		ILI9341_Clear (0, 0, 240, 320);
+		message_CheckPrepare();
+		rt_thread_delay(500);
 	}
 	Last_MainSchStep = MainSchStep;
 	
 	/* disable the interrupt from key1 */
     rt_pin_irq_enable(KEY1_DEV, PIN_IRQ_DISABLE);
 	
-	message_CheckPrepare();
-	rt_thread_delay(1000);
-	
 	/* Touch Check Application*/
 	XPT2046_Touch_Calibrate(6);
-	interface_system_reset();
 	
 	/* enable the interrupt from key1 */
     rt_pin_irq_enable(KEY1_DEV, PIN_IRQ_ENABLE);
@@ -65,6 +62,7 @@ MainSch_State step_Palette(void)
 	if(Last_MainSchStep!=MainSchStep)
 	{
 		ILI9341_Clear (0, 0, 240, 320);
+		message_PaletteApp();
 	}
 	Last_MainSchStep = MainSchStep;
 

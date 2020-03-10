@@ -483,7 +483,7 @@ uint8_t XPT2046_Touch_Calibrate ( uint8_t LCD_Mode )
 		
 	for ( i = 0; i < 4; i ++ )
 	{ 
-		ILI9341_Clear ( 0, 0, LCD_X_LENGTH, LCD_Y_LENGTH );       
+		ILI9341_Clear ( 0, 0, LCD_X_LENGTH, LCD_Y_LENGTH-16);       
 			
 		pStr = "Touch Calibrate ......";		
 		//插入空格，居中显示
@@ -526,7 +526,7 @@ uint8_t XPT2046_Touch_Calibrate ( uint8_t LCD_Mode )
 		strXPT2046_TouchPara[LCD_Mode].dY_Y = ( CalibrationFactor.En * 1.0 ) / CalibrationFactor.Divider;
 		strXPT2046_TouchPara[LCD_Mode].dY   = ( CalibrationFactor.Fn * 1.0 ) / CalibrationFactor.Divider;
 			
-	ILI9341_Clear ( 0, 0, LCD_X_LENGTH, LCD_Y_LENGTH );
+	ILI9341_Clear ( 0, 0, LCD_X_LENGTH, LCD_Y_LENGTH-16);
 	
 	LCD_SetTextColor(GREEN);
 	
@@ -542,7 +542,7 @@ uint8_t XPT2046_Touch_Calibrate ( uint8_t LCD_Mode )
 
 Failure:
 	
-	ILI9341_Clear ( 0, 0, LCD_X_LENGTH, LCD_Y_LENGTH ); 
+	ILI9341_Clear ( 0, 0, LCD_X_LENGTH, LCD_Y_LENGTH-16); 
 	
 	LCD_SetTextColor(RED);
 	
@@ -556,7 +556,7 @@ Failure:
 	sprintf(cStr,"%*c%s",((LCD_X_LENGTH/(((sFONT *)LCD_GetFont())->Width))-strlen(pStr))/2,' ',pStr)	;	
 	ILI9341_DispStringLine_EN ( ( LCD_Y_LENGTH >> 1 ) + (((sFONT *)LCD_GetFont())->Height), cStr );				
 
-	XPT2046_DelayUS ( 1000000 );		
+	rt_thread_mdelay(500);		
 	
 	return 0; 
 		

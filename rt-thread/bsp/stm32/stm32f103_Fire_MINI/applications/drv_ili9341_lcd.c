@@ -606,9 +606,9 @@ void ILI9341_DrawCircle ( uint16_t usX_Center, uint16_t usY_Center, uint16_t usR
 				ILI9341_SetPointPixel ( usX_Center - sCountY,   usY_Center + sCurrentX );           //3
 				ILI9341_SetPointPixel ( usX_Center - sCountY,   usY_Center - sCurrentX );           //4
 				ILI9341_SetPointPixel ( usX_Center - sCurrentX, usY_Center - sCountY );           //5    
-        ILI9341_SetPointPixel ( usX_Center + sCurrentX, usY_Center - sCountY );           //6
+        		ILI9341_SetPointPixel ( usX_Center + sCurrentX, usY_Center - sCountY );           //6
 				ILI9341_SetPointPixel ( usX_Center + sCountY,   usY_Center - sCurrentX );           //7 	
-        ILI9341_SetPointPixel ( usX_Center + sCountY,   usY_Center + sCurrentX );           //0				
+        		ILI9341_SetPointPixel ( usX_Center + sCountY,   usY_Center + sCurrentX );           //0				
 			}
 		
 		else

@@ -5,7 +5,7 @@
 void message_SysReaday(void);
 void error_SchFailed(void);
 void message_CheckPrepare(void);
-
+void message_PaletteApp(void);
 
 
 
