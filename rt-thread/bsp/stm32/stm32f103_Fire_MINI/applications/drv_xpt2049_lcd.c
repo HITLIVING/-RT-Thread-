@@ -4,6 +4,8 @@
 
 #include <stdio.h> 
 #include <string.h>
+
+#include "palette_app.h"
 #include "stm32f1xx_hal.h"
 
 /******************************* 声明 XPT2046 相关的静态函数 ***************************/
@@ -684,15 +686,12 @@ void XPT2046_TouchDown(strType_XPT2046_Coordinate * touch)
 	if(touch->pre_x == -1 && touch->pre_x == -1)
 		return;
 	
-	/***在此处编写自己的触摸按下处理应用***/
+	/*** deal function begin ***/ 
   
-	/*处理触摸画板的选择按钮*/
-    //Touch_Button_Down(touch->x,touch->y);
-  
-    /*处理描绘轨迹*/
-    //Draw_Trail(touch->pre_x,touch->pre_y,touch->x,touch->y,&brush);
+    /* paint track */
+    Draw_Trail(touch->pre_x,touch->pre_y,touch->x,touch->y);
 	
-	/***在上面编写自己的触摸按下处理应用***/
+	/*** deal function end ***/
 	
 	
 }
@@ -709,12 +708,11 @@ void XPT2046_TouchUp(strType_XPT2046_Coordinate * touch)
 	if(touch->pre_x == -1 && touch->pre_x == -1)
 		return;
 		
-	/***在此处编写自己的触摸释放处理应用***/
+	/*** deal function begin ***/
   
-	/*处理触摸画板的选择按钮*/
-	//Touch_Button_Up(touch->pre_x,touch->pre_y);	
+
 	
-	/***在上面编写自己的触摸释放处理应用***/
+	/*** deal function end ***/
 }
 
 /**
@@ -732,10 +730,7 @@ void XPT2046_TouchEvenHandler(void )
 		if(XPT2046_TouchDetect() == TOUCH_PRESSED)
 		{			
 			//获取触摸坐标
-			XPT2046_Get_TouchedPoint(&cinfo,strXPT2046_TouchPara);
-			
-			//输出调试信息到串口
-			XPT2046_DEBUG("x=%d,y=%d",cinfo.x,cinfo.y);
+			XPT2046_Get_TouchedPoint(&cinfo,strXPT2046_TouchPara);		
 			
 			//调用触摸被按下时的处理函数，可在该函数编写自己的触摸按下处理过程
 			XPT2046_TouchDown(&cinfo);

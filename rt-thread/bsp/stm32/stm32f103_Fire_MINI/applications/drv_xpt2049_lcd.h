@@ -47,25 +47,6 @@
 #define	            XPT2046_CHANNEL_X 	                          0x90 	          //通道Y+的选择控制字	
 #define	            XPT2046_CHANNEL_Y 	                          0xd0	          //通道X+的选择控制字
 
-//触摸参数写到FLASH里的标志
-#define							FLASH_TOUCH_PARA_FLAG_VALUE					0xA5
-
-//触摸标志写到FLASH里的地址
-#define 							FLASH_TOUCH_PARA_FLAG_ADDR						(1*1024)
-
-//触摸参数写到FLASH里的地址
-#define 							FLASH_TOUCH_PARA_ADDR									(2*1024)
-
-
-/*信息输出*/
-#define XPT2046_DEBUG_ON         0
-
-#define XPT2046_INFO(fmt,arg...)           printf("<<-XPT2046-INFO->> "fmt"\n",##arg)
-#define XPT2046_ERROR(fmt,arg...)          printf("<<-XPT2046-ERROR->> "fmt"\n",##arg)
-#define XPT2046_DEBUG(fmt,arg...)          do{\
-                                          if(XPT2046_DEBUG_ON)\
-                                          printf("<<-XPT2046-DEBUG->> [%d]"fmt"\n",__LINE__, ##arg);\
-                                          }while(0)
 
 /******************************* 声明 XPT2046 相关的数据类型 ***************************/
 typedef	struct          //液晶坐标结构体 
@@ -75,7 +56,7 @@ typedef	struct          //液晶坐标结构体
    int16_t y; 
 	
 	/*用于记录连续触摸时(长按)的上一次触摸位置*/
-	 int16_t pre_x;		
+   int16_t pre_x;		
    int16_t pre_y;
 	
 } strType_XPT2046_Coordinate;   

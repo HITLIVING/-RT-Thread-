@@ -478,6 +478,11 @@
               <FilePath>.\applications\message_app.c</FilePath>
             </File>
             <File>
+              <FileName>palette_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\palette_app.c</FilePath>
+            </File>
+            <File>
               <FileName>rtc_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\rtc_app.c</FilePath>
