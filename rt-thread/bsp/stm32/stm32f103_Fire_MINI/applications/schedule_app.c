@@ -9,12 +9,10 @@
 #include "drv_xpt2049_lcd.h"
 #include "drv_key.h"
 
-
 typedef enum MainSchStateType 	MainSch_State;
 typedef MainSch_State 			(*MainSch_Procedure)(void);
 enum MainSchStateType MainSchStep;
 enum MainSchStateType Last_MainSchStep;
-
 
 /*****************Main Schedule Procedure**********************/
 MainSch_State step_Interface(void)

@@ -14,6 +14,8 @@
 
 #include "interface_app.h"
 #include "schedule_app.h"
+#include "bitmap_app.h"
+
 #include "drv_flash.h"
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
@@ -41,6 +43,9 @@ int main(void)
 	interface_system_Init();	
 	/* System schedule init */
 	thread_System_Schedule_init();
+	
+	
+
 	
 }
 

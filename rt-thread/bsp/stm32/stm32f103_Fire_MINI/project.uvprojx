@@ -483,6 +483,11 @@
               <FilePath>.\applications\palette_app.c</FilePath>
             </File>
             <File>
+              <FileName>bitmap_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\bitmap_app.c</FilePath>
+            </File>
+            <File>
               <FileName>rtc_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\rtc_app.c</FilePath>

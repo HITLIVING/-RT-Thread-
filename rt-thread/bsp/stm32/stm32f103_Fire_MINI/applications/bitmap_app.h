@@ -1,14 +1,15 @@
-#include "bitmap_app.c"
+#ifndef __BITMAP_APP_H__
+#define __BITMAP_APP_H__
 
-void bitmap_arrows_write(rt_uint32_t Point_x,rt_uint32_t Point_y)
-{
-	rt_uint32_t point[]={
-	
-	
-	};
+#include <rtthread.h>
 
-}
+void bitmap_RightArr_build(rt_uint32_t Point_x,rt_uint32_t Point_y);
+void bitmap_RightArr_clear(rt_uint32_t Point_x,rt_uint32_t Point_y);
 
 
+
+
+
+#endif
 
 
