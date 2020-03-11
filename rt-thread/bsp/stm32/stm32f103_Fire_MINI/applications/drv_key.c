@@ -1,19 +1,51 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 #include <board.h>
+
 #include "schedule_app.h"
+#include "menu_app.h"
 #include "drv_key.h"
 
 extern enum MainSchStateType MainSchStep;
+extern enum MainSchStateType MainSchStep_choose;
+extern uint8_t menu_select_changedFlag;
 
 void KEY1_DEV_Handle(void *args)
 {   
-    MainSchStep = CheckTouch_State;
+	menu_select_changedFlag = 1;
+	
+	if(MainSchStep == Interface_State)
+	{
+		MainSchStep = Menu_State;
+	}
+	else if(MainSchStep == Menu_State)
+	{
+		MainSchStep_choose+=1;
+		if(MainSchStep_choose==(Type_Num+1))
+		{
+			MainSchStep_choose = CheckTouch_State;
+		}
+	}   
 }
 
 void KEY2_DEV_Handle(void *args)
-{	
-	MainSchStep = MainSchStep==Palette_State ? Interface_State:Palette_State;
+{
+	menu_select_changedFlag = 1;
+	if(MainSchStep == Interface_State)
+	{
+		MainSchStep = Menu_State;
+	}
+	else if(MainSchStep == Menu_State)
+	{
+		/* Enter Button */
+		MainSchStep = MainSchStep_choose;
+	}
+	else
+	{
+		/* Back Button */
+		MainSchStep = Menu_State;
+	}
+	
 }
 
 void KEY_Init(void)

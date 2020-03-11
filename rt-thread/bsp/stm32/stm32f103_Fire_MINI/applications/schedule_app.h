@@ -6,6 +6,8 @@ enum MainSchStateType
 {
 	Interface_State,
 	
+	Menu_State,
+	
 	CheckTouch_State,
 	
 	Palette_State,

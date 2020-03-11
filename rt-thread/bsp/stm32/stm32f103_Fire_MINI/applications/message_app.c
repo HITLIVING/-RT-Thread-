@@ -22,12 +22,27 @@ void error_SchFailed(void)
 	ILI9341_DispStringLine_EN (LINE(19),  "[Error] Build Sys_Sch failed!");	
 }
 
+void message_toMenu(void)
+{
+	LCD_SetFont(&Font8x16);
+	LCD_ClearLine(LINE(13));
+	ILI9341_DispStringLine_EN (LINE(13),  " -Press K1 or K2 to Continue- ");
+}
+
+void message_Menu(void)
+{
+	LCD_SetFont(&Font8x16);
+	LCD_ClearLine(LINE(19));
+	beep_on_ms(100);
+	ILI9341_DispStringLine_EN (LINE(19),  "Press K1 to elect,K2 to Enter");
+}
+
 void message_CheckPrepare(void)
 {
 	LCD_SetFont(&Font8x16);
 	LCD_ClearLine(LINE(19));
 	beep_on_ms(100);
-	ILI9341_DispStringLine_EN (LINE(19),  "[Mes] TouchCheck is Prepard");
+	ILI9341_DispStringLine_EN (LINE(19),  "[Mes] TouchCheck is Prepared");
 }
 
 void message_PaletteApp(void)
@@ -35,8 +50,10 @@ void message_PaletteApp(void)
 	LCD_SetFont(&Font8x16);
 	LCD_ClearLine(LINE(19));
 	beep_on_ms(100);
-	ILI9341_DispStringLine_EN (LINE(19),  "[Mes] PaletteApp is Prepard");
+	ILI9341_DispStringLine_EN (LINE(19),  "[Mes] PaletteApp is Prepared");
 }
+
+
 
 
 

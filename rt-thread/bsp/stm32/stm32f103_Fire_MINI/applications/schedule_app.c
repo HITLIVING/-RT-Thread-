@@ -5,14 +5,16 @@
 #include "schedule_app.h"
 #include "interface_app.h"
 #include "message_app.h"
+#include "menu_app.h"
+
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
 #include "drv_key.h"
 
 typedef enum MainSchStateType 	MainSch_State;
 typedef MainSch_State 			(*MainSch_Procedure)(void);
-enum MainSchStateType MainSchStep;
-enum MainSchStateType Last_MainSchStep;
+enum MainSchStateType MainSchStep = Interface_State;
+enum MainSchStateType Last_MainSchStep = Type_Num;
 
 /*****************Main Schedule Procedure**********************/
 MainSch_State step_Interface(void)
@@ -20,12 +22,33 @@ MainSch_State step_Interface(void)
 	/* step init */
 	if(Last_MainSchStep!=MainSchStep)
 	{
-		interface_system_reset();	
+		ILI9341_Clear (0, 0, 240, 320);
+		message_SysReaday();
+		message_toMenu();		
 	}
 	Last_MainSchStep = MainSchStep;
 	
 	/*Interface Application*/
 	interface_time_show();	
+	
+	return MainSchStep;
+}
+
+MainSch_State step_Menu(void)
+{
+	/* step init */
+	if(Last_MainSchStep!=MainSchStep)
+	{
+		ILI9341_Clear (0, 0, 240, 320);
+		LCD_SetColors(BLUE_SPE, BLACK); 
+		message_Menu();
+		menu_init();		
+	}
+	Last_MainSchStep = MainSchStep;
+	
+	menu_select();	
+	menu_timeshow();
+	
 	
 	return MainSchStep;
 }
@@ -37,7 +60,6 @@ MainSch_State step_CheckTouch(void)
 	{
 		ILI9341_Clear (0, 0, 240, 320);
 		message_CheckPrepare();
-		rt_thread_delay(500);
 	}
 	Last_MainSchStep = MainSchStep;
 	
@@ -51,7 +73,7 @@ MainSch_State step_CheckTouch(void)
     rt_pin_irq_enable(KEY1_DEV, PIN_IRQ_ENABLE);
 	
 	/* Check finished go back to Interface */
-	return Interface_State;
+	return Menu_State;
 }
 
 MainSch_State step_Palette(void)
@@ -74,7 +96,7 @@ MainSch_State step_Num(void)
 {
 	
 	
-	return MainSchStep;
+	return Interface_State;
 }
 
 
@@ -82,6 +104,8 @@ MainSch_State step_Num(void)
 MainSch_Procedure State_ProceSteps[] = 
 { 
 	step_Interface,
+	
+	step_Menu,
 	
 	step_CheckTouch,
 	
@@ -120,9 +144,6 @@ static void thread_main_entry(void *parameter)
 ALIGN(RT_ALIGN_SIZE)
 void thread_System_Schedule_init(void)
 {
-	MainSchStep = Interface_State;
-	Last_MainSchStep = Interface_State;
-	
 	rt_thread_t thread_main_obj = RT_NULL;
     /* Build a thread */
     thread_main_obj = rt_thread_create("thread_System_Schedule",

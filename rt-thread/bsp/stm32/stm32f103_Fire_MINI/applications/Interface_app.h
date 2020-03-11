@@ -3,7 +3,6 @@
 
 
 void interface_system_Init(void);
-void interface_system_reset(void);
 void interface_time_show(void);
 
 

@@ -473,6 +473,11 @@
               <FilePath>.\applications\Interface_app.c</FilePath>
             </File>
             <File>
+              <FileName>menu_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\menu_app.c</FilePath>
+            </File>
+            <File>
               <FileName>message_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\applications\message_app.c</FilePath>
