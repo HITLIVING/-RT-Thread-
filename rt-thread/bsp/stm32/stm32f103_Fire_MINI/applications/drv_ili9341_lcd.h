@@ -54,10 +54,7 @@
 
 //数据线输入输出
 #define DATAOUT(x) 	ILI9341_DATA_PORT->ODR=x; //数据输出
-#define DATAIN     	ILI9341_DATA_PORT->IDR;   //数据输入
-
-/*************************************** 调试延时预用 ******************************************/
-#define DEBUG_DELAY() ILI9341_Delay(0xFFFF)         
+#define DATAIN     	ILI9341_DATA_PORT->IDR;   //数据输入      
 
 /***************************** ILI934 显示区域的起始坐标和总行列数 ***************************/
 #define      ILI9341_DispWindow_X_Star		    0     //起始点的X坐标
