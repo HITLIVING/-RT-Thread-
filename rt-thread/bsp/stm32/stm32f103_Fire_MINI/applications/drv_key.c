@@ -13,39 +13,63 @@ extern uint8_t menu_select_changedFlag;
 void KEY1_DEV_Handle(void *args)
 {   
 	menu_select_changedFlag = 1;
-	
-	if(MainSchStep == Interface_State)
+		
+	switch (MainSchStep)
 	{
-		MainSchStep = Menu_State;
-	}
-	else if(MainSchStep == Menu_State)
-	{
-		MainSchStep_choose+=1;
-		if(MainSchStep_choose==(Type_Num+1))
-		{
-			MainSchStep_choose = CheckTouch_State;
-		}
-	}   
+		case Interface_State:
+			MainSchStep = Menu_State;
+			break;
+		
+		case Menu_State:
+			MainSchStep_choose+=1;
+			if(MainSchStep_choose==(Type_Num+1))
+			{
+				MainSchStep_choose = CheckTouch_State;
+			}
+			break;
+			
+		case CheckTouch_State:
+			
+			break;
+		
+		case Palette_State:
+			
+			break;
+		
+		case Type_Num:
+			
+			break;		
+	}					
 }
 
 void KEY2_DEV_Handle(void *args)
 {
 	menu_select_changedFlag = 1;
-	if(MainSchStep == Interface_State)
-	{
-		MainSchStep = Menu_State;
-	}
-	else if(MainSchStep == Menu_State)
-	{
-		/* Enter Button */
-		MainSchStep = MainSchStep_choose;
-	}
-	else
-	{
-		/* Back Button */
-		MainSchStep = Menu_State;
-	}
 	
+	switch (MainSchStep)
+	{
+		case Interface_State:
+			MainSchStep = Menu_State;
+			break;
+		
+		case Menu_State:
+			/* Enter Button */
+			MainSchStep = MainSchStep_choose;
+			break;
+			
+		case CheckTouch_State:
+			
+			break;
+		
+		case Palette_State:
+			/* Back Button */
+			MainSchStep = Menu_State;			
+			break;
+		
+		case Type_Num:
+			
+			break;		
+	}
 }
 
 void KEY_Init(void)
