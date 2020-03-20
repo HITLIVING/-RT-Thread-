@@ -5,6 +5,7 @@
 #include "stm32f1xx_hal.h"
 #include "drv_ili9341_lcd.h"
 #include "drv_fonts.h"
+#include "dfs_posix.h"
 
 //根据液晶扫描方向而变化的XY像素宽度
 //调用ILI9341_GramScan函数设置方向时会自动更改
@@ -691,10 +692,93 @@ static void ILI9341_DispChar_EN ( uint16_t usX, uint16_t usY, const char cChar )
 	
 	//每个字模的字节数
 	fontLength = (LCD_Currentfonts->Width*LCD_Currentfonts->Height)/8;
-		
-	//字模首地址
-	/*ascii码表偏移值乘以每个字模的字节数，求出字模的偏移位置*/
-	Pfont = (uint8_t *)&LCD_Currentfonts->table[ucRelativePositon * fontLength];
+	
+	//-------------------------------------------------------------------------
+	//Get font data from flash
+	
+	switch(LCD_Currentfonts->Width)
+	{
+		case 8:
+			{
+				rt_int32_t fd = 0;
+				rt_uint8_t buffer[8*16/8] = {0};
+				
+				fd = open("/ASCII8x16_Table.txt", O_RDONLY);
+				Pfont = buffer;
+				
+				if (fd>= 0)
+				{
+					lseek(fd, ucRelativePositon * fontLength, SEEK_SET);	
+					read(fd, buffer, sizeof(buffer));
+					close(fd);									
+				}
+				else
+				{
+					rt_kprintf("Read from file fonts error\n");
+				}
+				
+				break;
+			}			
+		case 16:
+			{
+				rt_int32_t fd = 0;
+				rt_uint8_t buffer[16*24/8] = {0};
+				
+				fd = open("/ASCII16x24_Table.txt", O_RDONLY);
+				Pfont = buffer;
+				
+				if (fd>= 0)
+				{
+					lseek(fd, ucRelativePositon * fontLength, SEEK_SET);	
+					read(fd, buffer, sizeof(buffer));
+					close(fd);									
+				}
+				else
+				{
+					rt_kprintf("Read from file fonts error\n");
+				}
+				
+				break;
+			}		
+		case 24:
+			{
+				rt_int32_t fd = 0;
+				rt_uint8_t buffer[24*32/8] = {0};
+				
+				fd = open("/ASCII24x32_Table.txt", O_RDONLY);
+				Pfont = buffer;
+				
+				if (fd>= 0)
+				{
+					lseek(fd, ucRelativePositon * fontLength, SEEK_SET);	
+					read(fd, buffer, sizeof(buffer));
+					close(fd);									
+				}
+				else
+				{
+					rt_kprintf("Read from file fonts error\n");
+				}
+				
+				break;
+			}		
+		default:
+			{
+				rt_kprintf("LCD_Currentfonts set error\n");
+				break;
+			}		
+			
+	}
+	//-------------------------------------------------------------------------
+	
+	
+//	//-------------------------------------------------------------------------
+//	//Get font data from ROM data,fonts need to be added in the array
+//	
+//	//字模首地址
+//	/*ascii码表偏移值乘以每个字模的字节数，求出字模的偏移位置*/
+//	Pfont = (uint8_t *)&LCD_Currentfonts->table[ucRelativePositon * fontLength];
+//	
+//	//-------------------------------------------------------------------------
 	
 	//设置显示窗口
 	ILI9341_OpenWindow ( usX, usY, LCD_Currentfonts->Width, LCD_Currentfonts->Height);

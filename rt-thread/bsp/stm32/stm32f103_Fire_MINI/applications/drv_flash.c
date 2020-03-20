@@ -23,8 +23,11 @@ rt_err_t rt_hw_spi_flash_init(void)
 
     rt_spi_configure((struct rt_spi_device *)rt_device_find(W25Q_SPI_DEVICE_NAME), &cfg);
 	
-	rt_sfud_flash_probe("W25Q256", "spi10");	
-	dfs_mkfs("elm", "W25Q256");
+	rt_sfud_flash_probe("W25Q256", "spi10");
+
+    //only used with a new flash chip,clear all chip and make a filesystem on the chip
+	//dfs_mkfs("elm", "W25Q256");
+	
 	dfs_mount("W25Q256","/","elm",0,0);
 	
     return RT_EOK;

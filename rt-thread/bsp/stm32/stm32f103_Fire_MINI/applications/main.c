@@ -43,10 +43,7 @@ int main(void)
 	interface_system_Init();	
 	/* System schedule init */
 	thread_System_Schedule_init();
-	
-	
 
-	
 }
 
 
