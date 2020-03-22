@@ -51,6 +51,22 @@ menu "On-chip Peripheral Drivers"
             endchoice
         endif
 
+    menuconfig BSP_USING_PWM
+         bool "Enable pwm"
+         default n
+         select RT_USING_PWM
+         if BSP_USING_PWM
+         menuconfig BSP_USING_PWM1
+                  bool "Enable timer2 output pwm"
+                  default n
+                  if BSP_USING_PWM1
+                       config BSP_USING_PWN2_CH1
+                              bool "Enable PWM1 channel1"
+                              default n
+                  endif
+          endif
+
+
     source "../libraries/HAL_Drivers/Kconfig"
        
 endmenu

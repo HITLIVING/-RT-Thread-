@@ -12,6 +12,8 @@ enum MainSchStateType
 	
 	Palette_State,
 	
+	Steering_State,
+	
 	Type_Num
 };
 

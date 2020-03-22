@@ -28,7 +28,7 @@ void menu_init(void)
 	ILI9341_DispStringLine_EN ( LINE(1),  "  --------System Menu-------" );
 	ILI9341_DispStringLine_EN ( LINE(3),  "   Touch Screen Calibration" );
 	ILI9341_DispStringLine_EN ( LINE(5),  "   Palette Tools" );
-	ILI9341_DispStringLine_EN ( LINE(7),  "" );
+	ILI9341_DispStringLine_EN ( LINE(7),  "   Steering Control" );
 	ILI9341_DispStringLine_EN ( LINE(9),  "" );
 	ILI9341_DispStringLine_EN ( LINE(11), "" );
 	ILI9341_DispStringLine_EN ( LINE(13), "" );
@@ -40,23 +40,29 @@ void menu_init(void)
 
 void menu_select(void)
 {
+	/* while  select has been changed Enter*/
 	if(menu_select_changedFlag==1)
 	{
+		/* reset flag */
 		menu_select_changedFlag=0;
 		
+		/* Clear last choose arrow */
 		bitmap_RightArr_clear(8,16*(2*(MainSchStep_choose-1)-1));
 		
 		if(MainSchStep_choose==Type_Num)
 		{
+			/* jump arrow to the last line : back */
 			bitmap_RightArr_build(8,16*17);
 		}
 		else
 		{
+			/* when the arrow back to the first line clear the last line arrow*/
 			if(MainSchStep_choose==CheckTouch_State)
 			{
 				bitmap_RightArr_clear(8,16*17);
 			}
 			
+			/* draw the arrow */
 			bitmap_RightArr_build(8,16*(2*MainSchStep_choose-1));
 		}	
 	}

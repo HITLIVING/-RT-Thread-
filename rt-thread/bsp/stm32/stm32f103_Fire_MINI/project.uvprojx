@@ -458,44 +458,29 @@
           <GroupName>Applications</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>schedule_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\schedule_app.c</FilePath>
-            </File>
-            <File>
               <FileName>Interface_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\Interface_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>menu_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\menu_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>message_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\message_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>palette_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\palette_app.c</FilePath>
+              <FilePath>applications\Interface_app.c</FilePath>
             </File>
             <File>
               <FileName>bitmap_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\bitmap_app.c</FilePath>
+              <FilePath>applications\bitmap_app.c</FilePath>
             </File>
             <File>
-              <FileName>rtc_app.c</FileName>
+              <FileName>drv_beep.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\rtc_app.c</FilePath>
+              <FilePath>applications\drv_beep.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\drv_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_fonts.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\drv_fonts.c</FilePath>
             </File>
             <File>
               <FileName>drv_ili9341_lcd.c</FileName>
@@ -503,34 +488,54 @@
               <FilePath>applications\drv_ili9341_lcd.c</FilePath>
             </File>
             <File>
-              <FileName>drv_xpt2049_lcd.c</FileName>
+              <FileName>drv_key.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\drv_xpt2049_lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_beep.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\drv_beep.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_flash.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\drv_flash.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_fonts.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\drv_fonts.c</FilePath>
+              <FilePath>applications\drv_key.c</FilePath>
             </File>
             <File>
               <FileName>drv_led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\drv_led.c</FilePath>
+              <FilePath>applications\drv_led.c</FilePath>
             </File>
             <File>
-              <FileName>drv_key.c</FileName>
+              <FileName>drv_xpt2049_lcd.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\applications\drv_key.c</FilePath>
+              <FilePath>applications\drv_xpt2049_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\menu_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\message_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>palette_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\palette_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\rtc_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>schedule_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\schedule_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>steering_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\steering_app.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -561,6 +566,11 @@
               <FileName>drv_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\libraries\HAL_Drivers\drv_usart.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\HAL_Drivers\drv_pwm.c</FilePath>
             </File>
             <File>
               <FileName>drv_spi.c</FileName>
@@ -740,6 +750,11 @@
               <FileName>pin.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\components\drivers\misc\pin.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_drv_pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\components\drivers\misc\rt_drv_pwm.c</FilePath>
             </File>
             <File>
               <FileName>rtc.c</FileName>
@@ -945,6 +960,16 @@
               <FileName>stm32f1xx_ll_spi.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_ll_spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f1xx_hal_tim_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Src\stm32f1xx_hal_tim_ex.c</FilePath>
             </File>
             <File>
               <FileName>stm32f1xx_hal_rtc.c</FileName>

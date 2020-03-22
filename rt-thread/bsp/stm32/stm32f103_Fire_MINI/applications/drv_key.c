@@ -5,6 +5,7 @@
 #include "schedule_app.h"
 #include "menu_app.h"
 #include "drv_key.h"
+#include "steering_app.h"
 
 extern enum MainSchStateType MainSchStep;
 extern enum MainSchStateType MainSchStep_choose;
@@ -36,6 +37,10 @@ void KEY1_DEV_Handle(void *args)
 			
 			break;
 		
+		case Steering_State:
+			
+			break;
+		
 		case Type_Num:
 			
 			break;		
@@ -64,6 +69,15 @@ void KEY2_DEV_Handle(void *args)
 		case Palette_State:
 			/* Back Button */
 			MainSchStep = Menu_State;			
+			break;
+		
+		case Steering_State:
+			/* Back Button */
+		
+			/* release the steering control*/
+			Steering_PWM_Disable();
+		
+			MainSchStep = Menu_State;
 			break;
 		
 		case Type_Num:

@@ -6,6 +6,7 @@
 #include "interface_app.h"
 #include "message_app.h"
 #include "menu_app.h"
+#include "steering_app.h"
 
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
@@ -92,6 +93,23 @@ MainSch_State step_Palette(void)
 	return MainSchStep;
 }
 
+MainSch_State step_Steering(void)
+{
+	/* step init */
+	if(Last_MainSchStep!=MainSchStep)
+	{
+		ILI9341_Clear (0, 0, 240, 320);		
+		
+		/*Enable the Steering*/
+		Steering_PWM_init();
+	}
+	Last_MainSchStep = MainSchStep;
+
+	Steering_PWM_Condition();
+
+	return MainSchStep;
+}
+
 MainSch_State step_Num(void)
 {
 	
@@ -110,6 +128,8 @@ MainSch_Procedure State_ProceSteps[] =
 	step_CheckTouch,
 	
 	step_Palette,
+	
+	step_Steering,
 	
 	step_Num
 
