@@ -32,7 +32,8 @@ rt_err_t Steering_PWM_init(void)
     /* enable PWM device */
     rt_pwm_enable(pwm_dev, 1);
 	
-	ILI9341_DispStringLine_EN (LINE(4),  "PWM Signal Freqence:");
+	ILI9341_DispStringLine_EN (LINE(2),  "  Steering Engine Control ");
+	ILI9341_DispStringLine_EN (LINE(4),  "PWM Signal Frequence:");
 	ILI9341_DispStringLine_EN (LINE(6),  "PWM Signal Duty:");
 	
 	return RT_EOK;

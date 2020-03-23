@@ -6,7 +6,7 @@ void message_SysReaday(void);
 void error_SchFailed(void);
 void message_toMenu(void);
 void message_CheckPrepare(void);
-void message_PaletteApp(void);
+void message_BackToMenu(void);
 void message_Menu(void);
 
 

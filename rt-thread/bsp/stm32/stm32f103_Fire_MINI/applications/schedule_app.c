@@ -83,7 +83,7 @@ MainSch_State step_Palette(void)
 	if(Last_MainSchStep!=MainSchStep)
 	{
 		ILI9341_Clear (0, 0, 240, 320);
-		message_PaletteApp();
+		message_BackToMenu();
 	}
 	Last_MainSchStep = MainSchStep;
 
@@ -99,7 +99,7 @@ MainSch_State step_Steering(void)
 	if(Last_MainSchStep!=MainSchStep)
 	{
 		ILI9341_Clear (0, 0, 240, 320);		
-		
+		message_BackToMenu();
 		/*Enable the Steering*/
 		Steering_PWM_init();
 	}

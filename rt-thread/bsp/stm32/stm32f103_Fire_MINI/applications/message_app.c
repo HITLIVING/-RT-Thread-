@@ -45,7 +45,7 @@ void message_CheckPrepare(void)
 	ILI9341_DispStringLine_EN (LINE(19),  "[Mes] TouchCheck is Prepared");
 }
 
-void message_PaletteApp(void)
+void message_BackToMenu(void)
 {
 	LCD_SetFont(&Font8x16);
 	LCD_ClearLine(LINE(19));
