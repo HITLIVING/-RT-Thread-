@@ -99,6 +99,9 @@
 #define RT_USING_SERIAL
 #define RT_SERIAL_USING_DMA
 #define RT_SERIAL_RB_BUFSZ 64
+#define RT_USING_HWTIMER
+#define RT_USING_I2C
+#define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
 #define RT_USING_PWM
 #define RT_USING_RTC
@@ -196,6 +199,15 @@
 #define BSP_USING_PWM
 #define BSP_USING_PWM1
 #define BSP_USING_PWN2_CH1
+#define BSP_USING_TIM
+#define BSP_USING_TIM6
+#define BSP_USING_TIM7
+#define BSP_USING_I2C1
+
+/* Notice: PA2 --> 2; PA3 --> 3 */
+
+#define BSP_I2C1_SCL_PIN 2
+#define BSP_I2C1_SDA_PIN 3
 
 /* Board extended module Drivers */
 
