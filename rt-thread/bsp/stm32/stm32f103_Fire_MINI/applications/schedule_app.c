@@ -7,9 +7,11 @@
 #include "message_app.h"
 #include "menu_app.h"
 #include "steering_app.h"
+#include "gyroscope_app.h"
 
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
+#include "drv_mpu6050.h"
 #include "drv_key.h"
 
 typedef enum MainSchStateType 	MainSch_State;
@@ -110,6 +112,27 @@ MainSch_State step_Steering(void)
 	return MainSchStep;
 }
 
+MainSch_State step_Gyroscope(void)
+{
+	/* step init */
+	if(Last_MainSchStep!=MainSchStep)
+	{
+		ILI9341_Clear (0, 0, 240, 320);		
+		message_BackToMenu();
+		/*Enable the Gyroscope*/
+		gyroscope_init();
+
+	}
+	Last_MainSchStep = MainSchStep;
+	
+	gyr_original_dataGet();
+	
+	gyr_dateDisplay();
+
+	return MainSchStep;
+}
+
+
 MainSch_State step_Num(void)
 {
 	
@@ -130,6 +153,8 @@ MainSch_Procedure State_ProceSteps[] =
 	step_Palette,
 	
 	step_Steering,
+	
+	step_Gyroscope,
 	
 	step_Num
 

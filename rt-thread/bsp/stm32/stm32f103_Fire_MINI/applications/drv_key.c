@@ -41,6 +41,10 @@ void KEY1_DEV_Handle(void *args)
 			
 			break;
 		
+		case Gyroscope_State:
+			
+			break;
+		
 		case Type_Num:
 			
 			break;		
@@ -76,6 +80,12 @@ void KEY2_DEV_Handle(void *args)
 		
 			/* release the steering control*/
 			Steering_PWM_Disable();
+		
+			MainSchStep = Menu_State;
+			break;
+		
+		case Gyroscope_State:
+			/* Back Button */
 		
 			MainSchStep = Menu_State;
 			break;

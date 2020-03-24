@@ -547,6 +547,11 @@
               <FileType>1</FileType>
               <FilePath>.\applications\drv_mpu6050.c</FilePath>
             </File>
+            <File>
+              <FileName>gyroscope_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\gyroscope_app.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

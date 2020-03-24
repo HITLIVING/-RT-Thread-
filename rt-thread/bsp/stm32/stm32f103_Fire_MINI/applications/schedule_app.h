@@ -14,6 +14,8 @@ enum MainSchStateType
 	
 	Steering_State,
 	
+	Gyroscope_State,
+	
 	Type_Num
 };
 

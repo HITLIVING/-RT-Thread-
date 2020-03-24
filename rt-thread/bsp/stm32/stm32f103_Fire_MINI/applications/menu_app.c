@@ -29,7 +29,7 @@ void menu_init(void)
 	ILI9341_DispStringLine_EN ( LINE(3),  "   Touch Screen Calibration" );
 	ILI9341_DispStringLine_EN ( LINE(5),  "   Palette Tools" );
 	ILI9341_DispStringLine_EN ( LINE(7),  "   Steering Control" );
-	ILI9341_DispStringLine_EN ( LINE(9),  "" );
+	ILI9341_DispStringLine_EN ( LINE(9),  "   Gyroscope Date" );
 	ILI9341_DispStringLine_EN ( LINE(11), "" );
 	ILI9341_DispStringLine_EN ( LINE(13), "" );
 	ILI9341_DispStringLine_EN ( LINE(15), "" );

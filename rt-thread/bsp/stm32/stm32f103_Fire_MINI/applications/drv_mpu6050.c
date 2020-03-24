@@ -76,7 +76,7 @@
  
 #define MPU6050_ADDR				0X68
 
-#define MPU6050_I2CBUS_NAME  "i2c2"     /* I2C设备名称,必须和drv_i2c.c注册的I2C设备名称一致 */
+#define MPU6050_I2CBUS_NAME  "i2c1"     /* I2C设备名称,必须和drv_i2c.c注册的I2C设备名称一致 */
 
 static struct rt_i2c_bus_device *mpu6050_i2c_bus;    /* I2C设备句柄 */
 
@@ -394,7 +394,3 @@ int mpu6050_hw_init(void)
 
     return RT_EOK;
 }
-
-
-
-

@@ -23,7 +23,7 @@
 #include "drv_led.h"
 #include "drv_key.h"
 
-int main(void)
+rt_bool_t main(void)
 {	
 	/********************Drive Init********************/
 	/* Flash elm-Fats init */
@@ -43,7 +43,12 @@ int main(void)
 	interface_system_Init();	
 	/* System schedule init */
 	thread_System_Schedule_init();
-
+	
+	return RT_EOK;
 }
+
+
+
+
 
 
