@@ -127,7 +127,7 @@ MainSch_State step_Gyroscope(void)
 	
 	gyr_original_dataGet();
 	
-	gyr_dateDisplay();
+	//gyr_dateDisplay();
 
 	return MainSchStep;
 }

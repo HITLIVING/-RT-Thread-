@@ -364,7 +364,7 @@ int mpu6050_hw_init(void)
     //陀螺仪传感器,±2000dps
     mpu6050_gyro_fsr_set(3);
     //加速度传感器,±2g
-    mpu6050_accel_fsr_set(0);
+    mpu6050_accel_fsr_set(3);
     //关闭所有中断
     mpu6050_write_reg(MPU_INT_EN_REG, 0x00);
     //I2C主模式关闭
@@ -383,8 +383,8 @@ int mpu6050_hw_init(void)
         mpu6050_write_reg(MPU_PWR_MGMT1_REG, 0x01);
         //加速度与陀螺仪都工作
         mpu6050_write_reg(MPU_PWR_MGMT2_REG, 0x00);
-        //设置采样率为125Hz
-        mpu6050_sample_rate_set(125);
+        //设置采样率为200Hz
+        mpu6050_sample_rate_set(200);
      }
     else
     {
