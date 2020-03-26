@@ -2,7 +2,9 @@
 #include <rtthread.h>
 #include <rtdevice.h>
 
+#include "gyroscope_app.h"
 #include "drv_timer.h"
+
 
 /*****************Extern Sensor Switch**********************/
 
@@ -10,7 +12,7 @@
 /* 定时器超时回调函数 */
 static rt_err_t timer6_handle(rt_device_t dev, rt_size_t size)
 {
- 
+	gyr_schedule();
     return 0;
 }
 
@@ -46,21 +48,6 @@ rt_err_t timer6_init(void)
         rt_kprintf("timer6 set mode failed! ret is :%d\n", ret);
         return ret;
     }
-
-    return ret;
-}
-
-rt_err_t timer6_Enable(void)
-{
-	rt_device_t timer6_dev = RT_NULL;   /* 定时器设备句柄 */
-	
-	/* 查找定时器设备 */
-    timer6_dev = rt_device_find("timer6");
-    if (timer6_dev == RT_NULL)
-    {
-        rt_kprintf("hwtimer sample run failed! can't find timer6 device!\n");
-		return RT_ERROR;
-    }
 	
 	/* 设置定时器超时值并开启定时器*/
 	rt_hwtimerval_t timeout_s;      
@@ -72,31 +59,7 @@ rt_err_t timer6_Enable(void)
         return RT_ERROR;
     }
 	
-	return RT_EOK;
-}
-
-rt_err_t timer6_Disable(void)
-{
-	rt_err_t ret = RT_EOK;
-	rt_device_t timer6_dev = RT_NULL;   /* 定时器设备句柄 */
-	
-	/* 查找定时器设备 */
-    timer6_dev = rt_device_find("timer6");
-    if (timer6_dev == RT_NULL)
-    {
-        rt_kprintf("hwtimer sample run failed! can't find timer6 device!\n");
-		return RT_ERROR;
-    }
-	
-	/* 关闭定时器*/
-	ret = rt_device_close(timer6_dev);
-    if (ret!=RT_EOK)
-    {
-        rt_kprintf("timer6 set timeout value failed\n");
-        return RT_ERROR;
-    }
-	
-	return RT_EOK;
+    return ret;
 }
 
 

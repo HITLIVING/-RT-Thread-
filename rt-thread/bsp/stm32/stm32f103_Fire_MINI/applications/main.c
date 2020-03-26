@@ -45,7 +45,8 @@ rt_bool_t main(void)
 	interface_system_Init();	
 	/* System schedule init */
 	thread_System_Schedule_init();
-
+//	/* timer6 init */
+//	timer6_init();
 
 	
 	return RT_EOK;

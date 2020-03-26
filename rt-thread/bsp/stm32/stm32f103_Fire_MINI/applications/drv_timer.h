@@ -5,8 +5,7 @@
 #include <rtdevice.h>
 
 rt_err_t timer6_init(void);
-rt_err_t timer6_Enable(void);
-rt_err_t timer6_Disable(void);
+
 
 
 

@@ -552,6 +552,11 @@
               <FileType>1</FileType>
               <FilePath>applications\steering_app.c</FilePath>
             </File>
+            <File>
+              <FileName>kalman_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\kalman_math.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
