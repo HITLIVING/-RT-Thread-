@@ -13,6 +13,12 @@
 #include "drv_xpt2049_lcd.h"
 #include "drv_mpu6050.h"
 #include "drv_key.h"
+#include "drv_timer.h"
+
+/*****************Extern Sensor Switch**********************/
+
+
+
 
 typedef enum MainSchStateType 	MainSch_State;
 typedef MainSch_State 			(*MainSch_Procedure)(void);
@@ -112,6 +118,7 @@ MainSch_State step_Steering(void)
 	return MainSchStep;
 }
 
+rt_uint32_t ms_5_Hz_200 = 0;
 MainSch_State step_Gyroscope(void)
 {
 	/* step init */
@@ -119,16 +126,23 @@ MainSch_State step_Gyroscope(void)
 	{
 		ILI9341_Clear (0, 0, 240, 320);		
 		message_BackToMenu();
+		
 		/*Enable the Gyroscope*/
 		gyroscope_init();
 
 	}
 	Last_MainSchStep = MainSchStep;
 	
-	gyr_original_dataGet();
-	
-	//gyr_dateDisplay();
+	ms_5_Hz_200++;
+	if(ms_5_Hz_200 == 5)
+	{
+		ms_5_Hz_200 = 0;
+		
+		/*Gyroscope schedule*/
+		gyr_schedule();
 
+	}
+	
 	return MainSchStep;
 }
 

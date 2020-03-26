@@ -11,54 +11,109 @@ rt_int16_t temp;        						//温度
 rt_int16_t orignal_gx,orignal_gy,orignal_gz;    //三轴速度计原始值
 rt_int16_t orignal_ax,orignal_ay,orignal_az;    //三轴加速度计原始值
 
-rt_int16_t real_gx,real_gy,real_gz;    //三轴速度计真实值（单位换算后 度/秒 并放大100倍）
-rt_int16_t real_ax,real_ay,real_az;    //三轴加速度计原始值（单位换算后 g     并放大100倍）
+#define OFFSET_SAMPLE 200
+rt_int16_t offset_sample = 0;					//偏移量计算采样数
+rt_int16_t offset_gx,offset_gy,offset_gz;    	//三轴速度计偏移量
+rt_int16_t offset_ax,offset_ay,offset_az;    	//三轴加速度计偏移量
+
+rt_int16_t real_gx,real_gy,real_gz;    	//三轴速度计真实值（单位换算后 度/秒 并放大100倍）
+rt_int16_t real_ax,real_ay,real_az;    	//三轴加速度计原始值（单位换算后 g     并放大100倍）
+
+rt_int32_t Angle_z = 0;					//Z轴转角输出值
 
 
+rt_int16_t gyr_step = gyr_sample;
+void gyr_schedule(void)
+{
+	switch(gyr_step)
+	{
+		case gyr_sample:
+			{			
+				gyr_sample_dataGet();
+				offset_sample++;
+				if(offset_sample==OFFSET_SAMPLE)
+					gyr_step = gyr_samplecul;
+				
+				break;
+			}							
+		case gyr_samplecul:
+			{
+				gyr_sample_cul();
+				gyr_step = gyr_deal;
+				break;
+			}			
+		case gyr_deal:
+			{
+				gyr_data_deal();
+				
+				break;
+			}			
+		default:
+			
+			break;
+		
+	}
+}
 
-void gyr_original_dataGet(void)
-{ 
-	mpu6050_temperature_get(&temp);
-         
-	mpu6050_accelerometer_get(&orignal_ax, &orignal_ay, &orignal_az);
+void gyr_sample_dataGet(void)
+{
+//	mpu6050_accelerometer_get(&orignal_ax, &orignal_ay, &orignal_az);
+
+	mpu6050_gyroscope_get(&orignal_gx, &orignal_gy, &orignal_gz);
+
+//	offset_ax += orignal_ax;
+//	offset_ay += orignal_ay;
+//	offset_az += orignal_az;
+//	offset_gx += orignal_gx;
+//	offset_gy += orignal_gy;
+	offset_gz += orignal_gz;
+
+}
+
+void gyr_sample_cul(void)
+{
+//	offset_ax = offset_ax/OFFSET_SAMPLE;
+//	offset_ay = offset_ay/OFFSET_SAMPLE;
+//	offset_az = offset_az/OFFSET_SAMPLE;
+//	offset_gx = offset_gx/OFFSET_SAMPLE;
+//	offset_gy = offset_gy/OFFSET_SAMPLE;
+	offset_gz = offset_gz/OFFSET_SAMPLE;
+}
+
+void gyr_data_deal(void)
+{         
+//	mpu6050_accelerometer_get(&orignal_ax, &orignal_ay, &orignal_az);
 
 	mpu6050_gyroscope_get(&orignal_gx, &orignal_gy, &orignal_gz);  
 	
-	orignal_gx-=init_gx_30;
-	orignal_gy-=init_gy_30;
-	orignal_gz-=init_gz_30;
-	orignal_ax-=init_ax_30;
-	orignal_ay-=init_ay_30;
-	orignal_az-=init_az_30;
+	orignal_gz-=offset_gz;
 	
-	real_gx = orignal_gx*100/16.4;
-	real_gy = orignal_gy*100/16.4;
+//	real_ax = orignal_ax*100/2048;
+//	real_ay = orignal_ay*100/2048;
+//	real_az = orignal_az*100/2048;
+//	real_gx = orignal_gx*100/16.4;
+//	real_gy = orignal_gy*100/16.4;
 	real_gz = orignal_gz*100/16.4;
 	
-	real_ax = orignal_ax*100/2048;
-	real_ay = orignal_ay*100/2048;
-	real_az = orignal_az*100/2048;
+	rt_kprintf("%d\n",real_gz);
 	
-	rt_kprintf("%d,%d,%d,%d,%d,%d\n",real_gx,real_gy,real_gz,real_ax,real_ay,real_az);
-	
+	Angle_z+=(rt_int32_t)real_gz*0.005;
+	//rt_kprintf("%d\n",Angle_z);
 }
 
 void gyr_dateDisplay(void)
 {
-	char str_temp[5]={0};
 	char str_AnSpeed[50]={0};
 	char str_AnAccel[50]={0};
-	
-	sprintf(str_temp, "%d", temp/100); 
-	sprintf(str_AnSpeed, "x = %d y = %d z = %d", orignal_ax,orignal_ay,orignal_az);
-	sprintf(str_AnAccel, "x = %d y = %d z = %d", orignal_gx,orignal_gy,orignal_gz);
-	
-	LCD_ClearLine(LINE(2));
-	ILI9341_DispStringLine_EN (LINE(2), str_temp);
+	 
+	sprintf(str_AnSpeed, "%d %d %d", orignal_ax,orignal_ay,orignal_az);
+	sprintf(str_AnAccel, "%d %d %d", orignal_gx,orignal_gy,orignal_gz);
+
 	LCD_ClearLine(LINE(4));
 	ILI9341_DispStringLine_EN (LINE(4), str_AnSpeed);
 	LCD_ClearLine(LINE(6));
 	ILI9341_DispStringLine_EN (LINE(6), str_AnAccel);
+	
 }
 
 void gyroscope_init(void)
@@ -72,6 +127,10 @@ void gyroscope_init(void)
 	
 	rt_thread_mdelay(50);
 	
+	char str_temp[5]={0};
+	mpu6050_temperature_get(&temp);
+	sprintf(str_temp, "%d", temp/100);
+	ILI9341_DispStringLine_EN (LINE(2), str_temp);	
 }
 
 

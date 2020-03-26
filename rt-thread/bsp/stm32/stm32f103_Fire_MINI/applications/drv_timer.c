@@ -4,17 +4,17 @@
 
 #include "drv_timer.h"
 
+/*****************Extern Sensor Switch**********************/
+
 
 /* 定时器超时回调函数 */
 static rt_err_t timer6_handle(rt_device_t dev, rt_size_t size)
 {
-    rt_kprintf("this is hwtimer timeout callback fucntion!\n");
-    rt_kprintf("tick is :%d !\n", rt_tick_get());
-
+ 
     return 0;
 }
 
-rt_err_t timer0_init(void)
+rt_err_t timer6_init(void)
 {
     rt_err_t ret = RT_EOK;
     rt_device_t timer6_dev = RT_NULL;   /* 定时器设备句柄 */
@@ -47,21 +47,57 @@ rt_err_t timer0_init(void)
         return ret;
     }
 
-	/* 设置定时器超时值*/
+    return ret;
+}
+
+rt_err_t timer6_Enable(void)
+{
+	rt_device_t timer6_dev = RT_NULL;   /* 定时器设备句柄 */
+	
+	/* 查找定时器设备 */
+    timer6_dev = rt_device_find("timer6");
+    if (timer6_dev == RT_NULL)
+    {
+        rt_kprintf("hwtimer sample run failed! can't find timer6 device!\n");
+		return RT_ERROR;
+    }
+	
+	/* 设置定时器超时值并开启定时器*/
 	rt_hwtimerval_t timeout_s;      
-    timeout_s.sec = 5;      /* 秒 */
-    timeout_s.usec = 0;     /* 微秒 */
+    timeout_s.sec = 0;      /* 秒 */
+    timeout_s.usec = 5;     /* 微秒 */
     if (rt_device_write(timer6_dev, 0, &timeout_s, sizeof(timeout_s)) != sizeof(timeout_s))
     {
         rt_kprintf("timer6 set timeout value failed\n");
         return RT_ERROR;
     }
-
-    return ret;
+	
+	return RT_EOK;
 }
 
-
-
+rt_err_t timer6_Disable(void)
+{
+	rt_err_t ret = RT_EOK;
+	rt_device_t timer6_dev = RT_NULL;   /* 定时器设备句柄 */
+	
+	/* 查找定时器设备 */
+    timer6_dev = rt_device_find("timer6");
+    if (timer6_dev == RT_NULL)
+    {
+        rt_kprintf("hwtimer sample run failed! can't find timer6 device!\n");
+		return RT_ERROR;
+    }
+	
+	/* 关闭定时器*/
+	ret = rt_device_close(timer6_dev);
+    if (ret!=RT_EOK)
+    {
+        rt_kprintf("timer6 set timeout value failed\n");
+        return RT_ERROR;
+    }
+	
+	return RT_EOK;
+}
 
 
 

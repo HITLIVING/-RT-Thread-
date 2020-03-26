@@ -22,6 +22,7 @@
 #include "drv_beep.h"
 #include "drv_led.h"
 #include "drv_key.h"
+#include "drv_timer.h"
 
 rt_bool_t main(void)
 {	
@@ -38,11 +39,14 @@ rt_bool_t main(void)
 	LED_Init();
 	/* Key drive init */
 	KEY_Init();
+
 	/********************Application Init********************/
 	/* System boot screen init */
 	interface_system_Init();	
 	/* System schedule init */
 	thread_System_Schedule_init();
+
+
 	
 	return RT_EOK;
 }

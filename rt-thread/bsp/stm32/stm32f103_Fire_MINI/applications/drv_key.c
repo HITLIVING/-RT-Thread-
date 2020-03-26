@@ -4,8 +4,13 @@
 
 #include "schedule_app.h"
 #include "menu_app.h"
-#include "drv_key.h"
 #include "steering_app.h"
+
+#include "drv_key.h"
+#include "drv_timer.h"
+
+/*****************Extern Sensor Switch**********************/
+
 
 extern enum MainSchStateType MainSchStep;
 extern enum MainSchStateType MainSchStep_choose;
@@ -85,7 +90,7 @@ void KEY2_DEV_Handle(void *args)
 			break;
 		
 		case Gyroscope_State:
-			/* Back Button */
+			/* Back Button */ 
 		
 			MainSchStep = Menu_State;
 			break;

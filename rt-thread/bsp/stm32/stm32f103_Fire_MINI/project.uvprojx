@@ -498,6 +498,11 @@
               <FilePath>applications\drv_led.c</FilePath>
             </File>
             <File>
+              <FileName>drv_mpu6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\drv_mpu6050.c</FilePath>
+            </File>
+            <File>
               <FileName>drv_timer.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\drv_timer.c</FilePath>
@@ -506,6 +511,11 @@
               <FileName>drv_xpt2049_lcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\drv_xpt2049_lcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>gyroscope_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\gyroscope_app.c</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
@@ -541,16 +551,6 @@
               <FileName>steering_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\steering_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>drv_mpu6050.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\drv_mpu6050.c</FilePath>
-            </File>
-            <File>
-              <FileName>gyroscope_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\gyroscope_app.c</FilePath>
             </File>
           </Files>
         </Group>
