@@ -26,6 +26,9 @@ float real_ax,real_ay,real_az;    	//三轴加速度计原始值（单位换算后 g     并放大
 
 float Angle_z = 0;					//Z轴转角输出值
 
+//**********************  Sample Period record  **************************//
+rt_tick_t tick_now = 0;
+rt_tick_t tick_last = 0;
 
 //**********************  Gyroscope Schedule Flag  **************************//
 rt_int16_t gyr_step = gyr_sample;
@@ -39,6 +42,12 @@ struct KalmanParam KalParam_gz;
 
 void gyr_schedule(void)
 {
+	
+//**********************  Sample Period test  **************************//	
+//	tick_now=rt_tick_get();
+//	printf("%d\n",tick_last-tick_now);
+//	tick_last = tick_now;
+	
 	switch(gyr_step)
 	{
 		case gyr_sample:
@@ -116,7 +125,7 @@ void gyr_data_deal(void)
 	
 //	printf("%f,%f\n",real_gz,KalParam_gz.out);
 	
-	Angle_z+=(rt_int32_t)(KalParam_gz.out)*0.005;
+	Angle_z+=(rt_int32_t)(KalParam_gz.out)*0.007;
 	printf("%f\n",Angle_z);
 }
 
