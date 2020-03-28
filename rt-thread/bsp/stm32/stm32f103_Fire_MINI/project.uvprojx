@@ -458,14 +458,59 @@
           <GroupName>Applications</GroupName>
           <Files>
             <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>schedule_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\schedule_app.c</FilePath>
+            </File>
+            <File>
               <FileName>Interface_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\Interface_app.c</FilePath>
             </File>
             <File>
+              <FileName>menu_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\menu_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\message_app.c</FilePath>
+            </File>
+            <File>
               <FileName>bitmap_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\bitmap_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>palette_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\palette_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>steering_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\steering_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>gyroscope_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\gyroscope_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>rtc_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\rtc_app.c</FilePath>
+            </File>
+            <File>
+              <FileName>kalman_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\kalman_math.c</FilePath>
             </File>
             <File>
               <FileName>drv_beep.c</FileName>
@@ -511,51 +556,6 @@
               <FileName>drv_xpt2049_lcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\drv_xpt2049_lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>gyroscope_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\gyroscope_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>menu_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\menu_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>message_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\message_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>palette_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\palette_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>rtc_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\rtc_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>schedule_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\schedule_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>steering_app.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>applications\steering_app.c</FilePath>
-            </File>
-            <File>
-              <FileName>kalman_math.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\applications\kalman_math.c</FilePath>
             </File>
           </Files>
         </Group>

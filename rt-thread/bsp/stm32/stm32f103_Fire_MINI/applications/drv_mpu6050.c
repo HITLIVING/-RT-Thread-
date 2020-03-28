@@ -361,8 +361,8 @@ int mpu6050_hw_init(void)
     mpu6050_write_reg(MPU_PWR_MGMT1_REG,0x00);
     //delay a while    
     rt_thread_delay(rt_tick_from_millisecond(20));
-    //陀螺仪传感器,±2000dps
-    mpu6050_gyro_fsr_set(3);
+    //陀螺仪传感器,±500dps
+    mpu6050_gyro_fsr_set(1);
     //加速度传感器,±2g
     mpu6050_accel_fsr_set(3);
     //关闭所有中断

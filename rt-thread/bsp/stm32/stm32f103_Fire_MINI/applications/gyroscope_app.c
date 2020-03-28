@@ -29,6 +29,7 @@ float Angle_z = 0;					//ZÖá×ª½ÇÊä³öÖµ
 //**********************  Sample Period record  **************************//
 rt_tick_t tick_now = 0;
 rt_tick_t tick_last = 0;
+rt_tick_t tick_delta = 0;
 
 //**********************  Gyroscope Schedule Flag  **************************//
 rt_int16_t gyr_step = gyr_sample;
@@ -44,9 +45,10 @@ void gyr_schedule(void)
 {
 	
 //**********************  Sample Period test  **************************//	
-//	tick_now=rt_tick_get();
-//	printf("%d\n",tick_last-tick_now);
-//	tick_last = tick_now;
+	tick_now=rt_tick_get();
+	tick_delta = tick_now-tick_last;
+//	printf("%d\n",tick_delta);
+	tick_last = tick_now;
 	
 	switch(gyr_step)
 	{
@@ -119,13 +121,16 @@ void gyr_data_deal(void)
 //	real_az = orignal_az/2048;
 //	real_gx = orignal_gx/16.4;
 //	real_gy = orignal_gy/16.4;
-	real_gz = (orignal_gz-offset_gz)/16.4;
+	real_gz = (orignal_gz-offset_gz)/65.534;
+	
+//	printf("%f\n",real_gz);
 	
 	KalmanParamUpdate(&KalParam_gz, real_gz);
 	
 //	printf("%f,%f\n",real_gz,KalParam_gz.out);
 	
-	Angle_z+=(rt_int32_t)(KalParam_gz.out)*0.007;
+	Angle_z+=KalParam_gz.out*tick_delta*0.001;
+	
 	printf("%f\n",Angle_z);
 }
 

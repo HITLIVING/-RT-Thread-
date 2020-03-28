@@ -1,6 +1,5 @@
 #include "kalman_math.h"
 
-
 void KalmanParamInit(struct KalmanParam* KalmanData, float Last_P,float Q,float R)
 {
 	KalmanData->Last_P = Last_P;
