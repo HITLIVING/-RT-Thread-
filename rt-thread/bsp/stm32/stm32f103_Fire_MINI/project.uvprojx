@@ -312,7 +312,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>3</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -336,9 +336,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_HAL_DRIVER, RT_USING_ARM_LIBC, STM32F103xE</Define>
+              <Define>USE_HAL_DRIVER, RT_USING_ARM_LIBC, STM32F103xE,MPL_LOG_NDEBUG=1,EMPL,MPU9250,EMPL_TARGET_STM32F1</Define>
               <Undefine></Undefine>
-              <IncludePath>.;..\..\..\include;applications;.;board;board\CubeMX_Config\Inc;..\libraries\HAL_Drivers;..\libraries\HAL_Drivers\config;..\..\..\libcpu\arm\common;..\..\..\libcpu\arm\cortex-m3;..\..\..\components\dfs\include;..\..\..\components\dfs\filesystems\devfs;..\..\..\components\dfs\filesystems\elmfat;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\spi;..\..\..\components\drivers\include;..\..\..\components\drivers\spi\sfud\inc;..\..\..\components\drivers\include;..\..\..\components\finsh;..\..\..\components\libc\compilers\armlibc;..\..\..\components\libc\compilers\common;..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Include;..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Inc;..\libraries\STM32F1xx_HAL\CMSIS\Include</IncludePath>
+              <IncludePath>.;..\..\..\include;applications;.;board;board\CubeMX_Config\Inc;..\libraries\HAL_Drivers;..\libraries\HAL_Drivers\config;..\..\..\libcpu\arm\common;..\..\..\libcpu\arm\cortex-m3;..\..\..\components\dfs\include;..\..\..\components\dfs\filesystems\devfs;..\..\..\components\dfs\filesystems\elmfat;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\include;..\..\..\components\drivers\spi;..\..\..\components\drivers\include;..\..\..\components\drivers\spi\sfud\inc;..\..\..\components\drivers\include;..\..\..\components\finsh;..\..\..\components\libc\compilers\armlibc;..\..\..\components\libc\compilers\common;..\libraries\STM32F1xx_HAL\CMSIS\Device\ST\STM32F1xx\Include;..\libraries\STM32F1xx_HAL\STM32F1xx_HAL_Driver\Inc;..\libraries\STM32F1xx_HAL\CMSIS\Include;.\applications\DMP\driver\include;.\applications\DMP\driver\eMPL;.\applications\DMP\driver\stm32L;.\applications\DMP\eMPL-hal;.\applications\DMP\mllite;.\applications\DMP\mpl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -498,14 +498,19 @@
               <FilePath>applications\steering_app.c</FilePath>
             </File>
             <File>
+              <FileName>rtc_app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\rtc_app.c</FilePath>
+            </File>
+            <File>
               <FileName>gyroscope_app.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\gyroscope_app.c</FilePath>
             </File>
             <File>
-              <FileName>rtc_app.c</FileName>
+              <FileName>gyroscope_dmp_app.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\rtc_app.c</FilePath>
+              <FilePath>.\applications\gyroscope_dmp_app.c</FilePath>
             </File>
             <File>
               <FileName>kalman_math.c</FileName>
@@ -528,6 +533,16 @@
               <FilePath>applications\drv_fonts.c</FilePath>
             </File>
             <File>
+              <FileName>drv_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\drv_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>drv_xpt2049_lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>applications\drv_xpt2049_lcd.c</FilePath>
+            </File>
+            <File>
               <FileName>drv_ili9341_lcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\drv_ili9341_lcd.c</FilePath>
@@ -548,14 +563,84 @@
               <FilePath>applications\drv_mpu6050.c</FilePath>
             </File>
             <File>
-              <FileName>drv_timer.c</FileName>
+              <FileName>drv_mpu9250.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\drv_timer.c</FilePath>
+              <FilePath>.\applications\drv_mpu9250.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DMP</GroupName>
+          <Files>
+            <File>
+              <FileName>inv_mpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\driver\eMPL\inv_mpu.c</FilePath>
             </File>
             <File>
-              <FileName>drv_xpt2049_lcd.c</FileName>
+              <FileName>inv_mpu_dmp_motion_driver.c</FileName>
               <FileType>1</FileType>
-              <FilePath>applications\drv_xpt2049_lcd.c</FilePath>
+              <FilePath>.\applications\DMP\driver\eMPL\inv_mpu_dmp_motion_driver.c</FilePath>
+            </File>
+            <File>
+              <FileName>log_stm32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\driver\stm32L\log_stm32.c</FilePath>
+            </File>
+            <File>
+              <FileName>eMPL_outputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\eMPL-hal\eMPL_outputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>data_builder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\data_builder.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_outputs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\hal_outputs.c</FilePath>
+            </File>
+            <File>
+              <FileName>message_layer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\message_layer.c</FilePath>
+            </File>
+            <File>
+              <FileName>ml_math_func.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\ml_math_func.c</FilePath>
+            </File>
+            <File>
+              <FileName>mlmath.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\mlmath.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\mpl.c</FilePath>
+            </File>
+            <File>
+              <FileName>results_holder.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\results_holder.c</FilePath>
+            </File>
+            <File>
+              <FileName>start_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\start_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>storage_manager.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\DMP\mllite\storage_manager.c</FilePath>
+            </File>
+            <File>
+              <FileName>libmpllib.lib</FileName>
+              <FileType>4</FileType>
+              <FilePath>.\applications\DMP\mpl\libmpllib.lib</FilePath>
             </File>
           </Files>
         </Group>

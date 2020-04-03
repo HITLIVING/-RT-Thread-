@@ -8,6 +8,7 @@
 #include "menu_app.h"
 #include "steering_app.h"
 #include "gyroscope_app.h"
+#include "gyroscope_dmp_app.h"
 
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
@@ -128,7 +129,10 @@ MainSch_State step_Gyroscope(void)
 		message_BackToMenu();
 		
 		/*Enable the Gyroscope*/
-		gyroscope_init();
+		//gyroscope_init();
+		
+		/*Enable the Gyroscope_DMP*/
+		gyroscope_dmp_init();
 
 	}
 	Last_MainSchStep = MainSchStep;
@@ -139,8 +143,13 @@ MainSch_State step_Gyroscope(void)
 		ms_5_Hz_200 = 0;
 		
 		/*Gyroscope schedule*/
-		gyr_schedule();
-
+		//gyr_schedule();
+		
+		/*Gyroscope_DMP_sample*/
+		//gyrDMP_sample_dataGet();
+		
+		/*Gyroscope_DMP_euangle*/
+		gyrDMP_euangle_dataGet();
 	}
 	
 	return MainSchStep;
@@ -191,8 +200,8 @@ static void thread_main_entry(void *parameter)
 	}		
 }
 
-#define MAIN_THREAD_PRIORITY         21
-#define MAIN_THREAD_STACK_SIZE       1024
+#define MAIN_THREAD_PRIORITY         10
+#define MAIN_THREAD_STACK_SIZE       2048
 #define MAIN_THREAD_TIMESLICE        100
 /**
   * @brief  System main Schedule Thread Init
