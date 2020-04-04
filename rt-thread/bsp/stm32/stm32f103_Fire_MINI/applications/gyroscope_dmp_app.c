@@ -71,8 +71,8 @@ void gyrDMP_sample_dataGet(void)
 
 void gyrDMP_euangle_dataGet(void)
 {
-	mpu_mpl_get_data(&pitch,&roll,&yaw);
-	
+//	mpu_mpl_get_data(&pitch,&roll,&yaw);
+	mpu_dmp_get_data(&pitch,&roll,&yaw);
 //	char str_euangle[50]={0};
 //	
 //	sprintf(str_euangle, "%f %f %f", pitch,roll,yaw);

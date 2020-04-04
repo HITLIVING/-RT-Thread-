@@ -2318,7 +2318,7 @@ static int accel_6500_self_test(long *bias_regular, long *bias_st, int debug)
 		if(debug)
 			log_i("Accel:CRITERIA C: bias less than %7.4f\n", accel_offset_max/1.f);
 		for (i = 0; i < 3; i++) {
-			if(fabs(bias_regular[i]) > accel_offset_max) {
+			if(abs(bias_regular[i]) > accel_offset_max) {
 				if(debug)
 					log_i("FAILED: Accel axis:%d = %ld > 500mg\n", i, bias_regular[i]);
 				result |= 1 << i;	//Error condition
@@ -3312,16 +3312,17 @@ static signed char gyro_orientation[9] = { 1, 0, 0,
 static signed char comp_orientation[9] = { 0, 1, 0,
                                            1, 0, 0,
                                            0, 0,-1};
+int result;
 //MPU9250自测试
 //返回值:0,正常
 //    其他,失败
 uint8_t run_self_test(void)
 {
-	int result;
+
 	//char test_packet[4] = {0};
 	long gyro[3], accel[3]; 
 	result = mpu_run_6500_self_test(gyro, accel,0);
-	if (result == 0x7) 
+	if (result == 0x4) 
 	{
 		/* Test passed. We can trust the gyro data here, so let's push it down
 		* to the DMP.
@@ -3336,6 +3337,7 @@ uint8_t run_self_test(void)
         //inv_set_gyro_bias(gyro, 3);
 		dmp_set_gyro_bias(gyro);
 		mpu_get_accel_sens(&accel_sens);
+		
 		accel[0] *= accel_sens;
 		accel[1] *= accel_sens;
 		accel[2] *= accel_sens;
@@ -3429,8 +3431,8 @@ uint8_t mpu_dmp_init(void)
 		if(res)return 8; 
 		res=dmp_set_fifo_rate(DEFAULT_MPU_HZ);	//设置DMP输出速率(最大不超过200Hz)
 		if(res)return 9;   
-		//res=run_self_test();		//自检
-		//if(res)return 10;    
+		res=run_self_test();		//自检
+		if(res)return 10;    
 		res=mpu_set_dmp_state(1);	//使能DMP
 		if(res)return 11;     
 	}
