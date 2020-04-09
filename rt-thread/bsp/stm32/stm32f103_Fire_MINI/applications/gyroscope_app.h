@@ -19,9 +19,10 @@ void gyroscope_init(void);
 void gyr_schedule(void);
 void gyr_offset_cul(void);
 void gyr_data_deal(void);
-
 void gyr_sample_dataGet(void);
-
+void mag_offset_cul(void);
+void mag_data_deal(void);
+void mag_sample_dataGet(void);
 
 
 

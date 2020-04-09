@@ -27,24 +27,31 @@
 rt_int16_t chip_temp;        					//温度
 rt_int16_t orignal_gx,orignal_gy,orignal_gz;    //三轴速度计原始值
 rt_int16_t orignal_ax,orignal_ay,orignal_az;    //三轴加速度计原始值
+
+
+#define OFFSET_SAMPLE_GA 1000					//偏移量计算采样数门限
+float offset_sample_ga = 0.0;					//偏移量计算采样数
+float offset_gx,offset_gy,offset_gz;    		//三轴速度计偏移量
+float offset_ax,offset_ay,offset_az;    		//三轴加速度计偏移量
+
+float real_gx,real_gy,real_gz;    				//三轴速度计真实值（单位换算后 度/秒）
+float real_ax,real_ay,real_az;    				//三轴加速度计真实值（单位换算后 g）
+
+float Angle_z = 0;								//Z轴转角输出值
+
+//**********************  Magnetometer Data Sheet  **************************//
+
 rt_int16_t orignal_mx,orignal_my,orignal_mz;    //三轴磁力计原始值
 
-#define OFFSET_SAMPLE 200
-float offset_sample = 0;					//偏移量计算采样数
-float offset_gx,offset_gy,offset_gz;    	//三轴速度计偏移量
-float offset_ax,offset_ay,offset_az;    	//三轴加速度计偏移量
+float offset_mx = (-129.0+93.0)/2.0;			//地磁计X轴零点
+float offset_my = (14.0+244.0)/2.0;				//地磁计Y轴零点
+float offset_mz = 0.0;							//地磁计Z轴零点
 
-float offset_mx = (-129+93)/2;
-float offset_my = (14+244)/2;
-float offset_mz = 0;				//磁力计偏移量
+#define OFFSET_SAMPLE_MZ (OFFSET_SAMPLE_GA/10)	//地磁计初始角计算采样数门限
+float offset_sample_mz = 0.0;					//偏移量计算采样数
+double offset_Angle_mz = 0.0;					//Z轴初始角度
 
-double offset_ZAngle = 0.0;					//Z轴初始角度
-
-float real_gx,real_gy,real_gz;    	//三轴速度计真实值（单位换算后 度/秒）
-float real_ax,real_ay,real_az;    	//三轴加速度计真实值（单位换算后 g）
-
-double Angle_mz = 0.0;				//磁力计计算Z轴转角（单位换算后 度）
-float Angle_z = 0;					//Z轴转角输出值
+double Angle_mz = 0.0;							//磁力计计算Z轴转角（单位换算后 度）
 
 //**********************  Sample Period record  **************************//
 rt_tick_t tick_now = 0;
@@ -75,30 +82,24 @@ void gyr_schedule(void)
 //	printf("%d\n",tick_delta);
 	tick_last = tick_now;
 
-//**********************  Long Period deal ****************************//	
-	ms_Hz++;
-	if(ms_Hz == 10)
-	{
-		MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
-		
-		Angle_mz = atan((orignal_my - offset_my)/(orignal_mx - offset_mx)) - offset_ZAngle;
-		Angle_mz = Angle_mz/3.1415926*180.0 - (-2);
-		
-		KalmanParamUpdate(&KalParam_mz, Angle_mz);		
-		
-		printf("%f\n",Angle_mz);
-		
-		ms_Hz = 0;
-	}
-
-//**********************  Short Period deal ****************************//
+//********************** Period deal ****************************//
 	switch(gyr_step)
 	{
 		case gyr_sample:
 			{			
 				gyr_sample_dataGet();
-				offset_sample++;
-				if(offset_sample==OFFSET_SAMPLE)
+				offset_sample_ga++;
+				
+				ms_Hz++;
+				if(ms_Hz == 10)
+				{
+					mag_sample_dataGet();
+					offset_sample_mz++;
+
+					ms_Hz = 0;
+				}
+				
+				if(offset_sample_ga>=OFFSET_SAMPLE_GA && offset_sample_mz>=OFFSET_SAMPLE_MZ)
 					gyr_step = gyr_samplecul;
 				
 				break;
@@ -106,12 +107,21 @@ void gyr_schedule(void)
 		case gyr_samplecul:
 			{
 				gyr_offset_cul();
+				mag_offset_cul();
 				gyr_step = gyr_deal;
 				break;
 			}			
 		case gyr_deal:
 			{
 				gyr_data_deal();
+				
+				ms_Hz++;
+				if(ms_Hz == 10)
+				{
+					mag_data_deal();
+
+					ms_Hz = 0;
+				}
 				
 				break;
 			}			
@@ -131,7 +141,7 @@ void gyr_sample_dataGet(void)
 
 void gyr_offset_cul(void)
 {
-	offset_gz = offset_gz/OFFSET_SAMPLE;
+	offset_gz = offset_gz/offset_sample_ga;
 
 }
 
@@ -147,6 +157,35 @@ void gyr_data_deal(void)
 	
 //	printf("%.5f\n",Angle_z);
 }
+
+void mag_sample_dataGet(void)
+{
+	MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
+	
+	Angle_mz = atan((orignal_my - offset_my)/(orignal_mx - offset_mx));
+		
+	offset_Angle_mz+=Angle_mz;
+}
+
+void mag_offset_cul(void)
+{
+	offset_Angle_mz = offset_Angle_mz/offset_sample_mz;
+	
+}
+
+void mag_data_deal(void)
+{
+	MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
+	
+	Angle_mz = atan((orignal_my - offset_my)/(orignal_mx - offset_mx)) - offset_Angle_mz;
+	Angle_mz = Angle_mz/3.1415926*180.0;
+	
+	KalmanParamUpdate(&KalParam_mz, Angle_mz);		
+	
+	printf("%f\n",KalParam_mz.out);
+
+}
+
 
 void gyr_dateDisplay(void)
 {
@@ -193,7 +232,7 @@ void gyroscope_init(void)
 	
 	/* Get the init Angle Z */
 	MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
-	offset_ZAngle = atan((orignal_my - offset_my)/(orignal_mx - offset_mx));
+	offset_Angle_mz = atan((orignal_my - offset_my)/(orignal_mx - offset_mx));
 }
 
 
