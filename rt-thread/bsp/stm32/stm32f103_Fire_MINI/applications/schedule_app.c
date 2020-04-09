@@ -8,11 +8,9 @@
 #include "menu_app.h"
 #include "steering_app.h"
 #include "gyroscope_app.h"
-#include "gyroscope_dmp_app.h"
 
 #include "drv_ili9341_lcd.h"
 #include "drv_xpt2049_lcd.h"
-#include "drv_mpu6050.h"
 #include "drv_key.h"
 #include "drv_timer.h"
 
@@ -119,7 +117,6 @@ MainSch_State step_Steering(void)
 	return MainSchStep;
 }
 
-rt_uint32_t ms_5_Hz_200 = 0;
 MainSch_State step_Gyroscope(void)
 {
 	/* step init */
@@ -129,29 +126,14 @@ MainSch_State step_Gyroscope(void)
 		message_BackToMenu();
 		
 		/*Enable the Gyroscope*/
-		//gyroscope_init();
+		gyroscope_init();
 		
-		/*Enable the Gyroscope_DMP*/
-		gyroscope_dmp_init();
-
 	}
 	Last_MainSchStep = MainSchStep;
 	
-	ms_5_Hz_200++;
-	if(ms_5_Hz_200 == 5)
-	{
-		ms_5_Hz_200 = 0;
-		
-		/*Gyroscope schedule*/
-		//gyr_schedule();
-		
-		/*Gyroscope_DMP_sample*/
-		//gyrDMP_sample_dataGet();
-		
-		/*Gyroscope_DMP_euangle*/
-		gyrDMP_euangle_dataGet();
-	}
-	
+	/*Gyroscope schedule*/
+	gyr_schedule();
+
 	return MainSchStep;
 }
 

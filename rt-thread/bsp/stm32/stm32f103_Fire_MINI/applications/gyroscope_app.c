@@ -1,29 +1,49 @@
+/*
+ * Copyright (c) 2020 WangXi
+ *
+ * Gyroscope Drive and Algorithm
+ *
+ * Change Logs:
+ *  
+ * Note:
+ * 采样决策需要重构
+ * 偏移量的添加
+ * 正负换算关系
+ */
 
 #include <rtthread.h>
 #include <rtdevice.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "gyroscope_app.h"
-#include "drv_mpu6050.h"
+#include "drv_mpu9250.h"
 #include "drv_ili9341_lcd.h"
 #include "kalman_math.h"
 
 
 //**********************  Gyroscope Data Sheet  **************************//
-
-rt_int16_t temp;        						//温度
+rt_int16_t chip_temp;        					//温度
 rt_int16_t orignal_gx,orignal_gy,orignal_gz;    //三轴速度计原始值
 rt_int16_t orignal_ax,orignal_ay,orignal_az;    //三轴加速度计原始值
+rt_int16_t orignal_mx,orignal_my,orignal_mz;    //三轴磁力计原始值
 
-#define OFFSET_SAMPLE 1000
+#define OFFSET_SAMPLE 200
 float offset_sample = 0;					//偏移量计算采样数
 float offset_gx,offset_gy,offset_gz;    	//三轴速度计偏移量
 float offset_ax,offset_ay,offset_az;    	//三轴加速度计偏移量
 
-float real_gx,real_gy,real_gz;    	//三轴速度计真实值（单位换算后 度/秒 并放大100倍）
-float real_ax,real_ay,real_az;    	//三轴加速度计原始值（单位换算后 g     并放大100倍）
+float offset_mx = (-129+93)/2;
+float offset_my = (14+244)/2;
+float offset_mz = 0;				//磁力计偏移量
 
+double offset_ZAngle = 0.0;					//Z轴初始角度
+
+float real_gx,real_gy,real_gz;    	//三轴速度计真实值（单位换算后 度/秒）
+float real_ax,real_ay,real_az;    	//三轴加速度计真实值（单位换算后 g）
+
+double Angle_mz = 0.0;				//磁力计计算Z轴转角（单位换算后 度）
 float Angle_z = 0;					//Z轴转角输出值
 
 //**********************  Sample Period record  **************************//
@@ -40,7 +60,12 @@ struct KalmanParam KalParam_gz;
 #define	KalParam_gz_Q 	  	0.001
 #define	KalParam_gz_R 	  	0.543
 
+struct KalmanParam KalParam_mz;
+#define	KalParam_mz_LastP 	0.02
+#define	KalParam_mz_Q 	  	0.001
+#define	KalParam_mz_R 	  	0.543
 
+rt_uint32_t ms_Hz = 0;
 void gyr_schedule(void)
 {
 	
@@ -49,7 +74,24 @@ void gyr_schedule(void)
 	tick_delta = tick_now-tick_last;
 //	printf("%d\n",tick_delta);
 	tick_last = tick_now;
-	
+
+//**********************  Long Period deal ****************************//	
+	ms_Hz++;
+	if(ms_Hz == 10)
+	{
+		MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
+		
+		Angle_mz = atan((orignal_my - offset_my)/(orignal_mx - offset_mx)) - offset_ZAngle;
+		Angle_mz = Angle_mz/3.1415926*180.0 - (-2);
+		
+		KalmanParamUpdate(&KalParam_mz, Angle_mz);		
+		
+		printf("%f\n",Angle_mz);
+		
+		ms_Hz = 0;
+	}
+
+//**********************  Short Period deal ****************************//
 	switch(gyr_step)
 	{
 		case gyr_sample:
@@ -63,7 +105,7 @@ void gyr_schedule(void)
 			}							
 		case gyr_samplecul:
 			{
-				gyr_sample_cul();
+				gyr_offset_cul();
 				gyr_step = gyr_deal;
 				break;
 			}			
@@ -75,63 +117,35 @@ void gyr_schedule(void)
 			}			
 		default:
 			
-			break;
-		
+			break;	
 	}
 }
 
 void gyr_sample_dataGet(void)
 {
-//	mpu6050_accelerometer_get(&orignal_ax, &orignal_ay, &orignal_az);
-
-	mpu6050_gyroscope_get(&orignal_gx, &orignal_gy, &orignal_gz);
+	MPU_Get_Gyroscope(&orignal_gx, &orignal_gy, &orignal_gz);	
 	
-//	offset_ax += orignal_ax;
-//	offset_ay += orignal_ay;
-//	offset_az += orignal_az;
-//	offset_gx += orignal_gx;
-//	offset_gy += orignal_gy;
 	offset_gz += orignal_gz;
-	
-//	rt_kprintf("%d\n",orignal_gz);
 
 }
 
-void gyr_sample_cul(void)
+void gyr_offset_cul(void)
 {
-//	offset_ax = offset_ax/OFFSET_SAMPLE;
-//	offset_ay = offset_ay/OFFSET_SAMPLE;
-//	offset_az = offset_az/OFFSET_SAMPLE;
-//	offset_gx = offset_gx/OFFSET_SAMPLE;
-//	offset_gy = offset_gy/OFFSET_SAMPLE;
 	offset_gz = offset_gz/OFFSET_SAMPLE;
-	
-//	printf("\n");
-//	printf("%f\n",offset_gz);
+
 }
 
 void gyr_data_deal(void)
 {         
-//	mpu6050_accelerometer_get(&orignal_ax, &orignal_ay, &orignal_az);
-
-	mpu6050_gyroscope_get(&orignal_gx, &orignal_gy, &orignal_gz);  
+	MPU_Get_Gyroscope(&orignal_gx, &orignal_gy, &orignal_gz);	
 		
-//	real_ax = orignal_ax/2048;
-//	real_ay = orignal_ay/2048;
-//	real_az = orignal_az/2048;
-//	real_gx = orignal_gx/16.4;
-//	real_gy = orignal_gy/16.4;
-	real_gz = (orignal_gz-offset_gz)/65.534;
-	
-//	printf("%f\n",real_gz);
+	real_gz = (orignal_gz-offset_gz)/131.068;
 	
 	KalmanParamUpdate(&KalParam_gz, real_gz);
 	
-//	printf("%f,%f\n",real_gz,KalParam_gz.out);
-	
 	Angle_z+=KalParam_gz.out*tick_delta*0.001;
 	
-	printf("%f\n",Angle_z);
+//	printf("%.5f\n",Angle_z);
 }
 
 void gyr_dateDisplay(void)
@@ -151,25 +165,35 @@ void gyr_dateDisplay(void)
 
 void gyroscope_init(void)
 {
+	int res = 0;
+	
 	ILI9341_DispStringLine_EN (LINE(1), "Gyroscope Temperature:" );
 	ILI9341_DispStringLine_EN (LINE(3), "Gyroscope Angular Speed:" );
 	ILI9341_DispStringLine_EN (LINE(5), "Gyroscope Angular Accel:" );
 	ILI9341_DispStringLine_EN (LINE(7), "Gyroscope Z Angular:" );
 	
-	/* init the mpu6050 drive */
-	mpu6050_hw_init();
-	
+	/* init the mpu9250 drive */
+	res = MPU9250_Init();
+	if(res!=0)
+		printf("mpu9250 drive error\n");
+		
 	rt_thread_mdelay(50);
 	
-	/* Display the temp of mpu6050*/
+	/* Display the temp of mpu9250*/
 	char str_temp[5]={0};
-	mpu6050_temperature_get(&temp);
-	sprintf(str_temp, "%d", temp/100);
+	chip_temp =  MPU_Get_Temperature();
+	sprintf(str_temp, "%d", chip_temp/100);
 	ILI9341_DispStringLine_EN (LINE(2), str_temp);
 	
 	/* Init the Kalman Filter on g_Z*/
 	KalmanParamInit(&KalParam_gz,KalParam_gz_LastP,KalParam_gz_Q,KalParam_gz_R);
+		
+	/* Init the Kalman Filter on m_Z*/
+	KalmanParamInit(&KalParam_mz,KalParam_mz_LastP,KalParam_mz_Q,KalParam_mz_R);	
 	
+	/* Get the init Angle Z */
+	MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
+	offset_ZAngle = atan((orignal_my - offset_my)/(orignal_mx - offset_mx));
 }
 
 

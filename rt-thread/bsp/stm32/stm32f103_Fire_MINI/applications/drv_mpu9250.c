@@ -33,7 +33,7 @@ rt_uint8_t MPU9250_Init(void)
     rt_thread_mdelay(100);  //延时100ms,使用Rt-thread自带延时
 	
     MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT1_REG,0X00);//唤醒MPU9250
-    MPU_Set_Gyro_Fsr(3);					        	//陀螺仪传感器,±2000dps
+    MPU_Set_Gyro_Fsr(0);					        	//陀螺仪传感器,±250dps
 	MPU_Set_Accel_Fsr(0);					       	 	//加速度传感器,±2g
     MPU_Set_Rate(50);						       	 	//设置采样率50Hz
     MPU_Write_Byte(MPU9250_ADDR,MPU_INT_EN_REG,0X00);   //关闭所有中断
@@ -45,7 +45,7 @@ rt_uint8_t MPU9250_Init(void)
     {
         MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT1_REG,0X01);  	//设置CLKSEL,PLL X轴为参考
         MPU_Write_Byte(MPU9250_ADDR,MPU_PWR_MGMT2_REG,0X00);  	//加速度与陀螺仪都工作
-		MPU_Set_Rate(50);						       	//设置采样率为50Hz   
+		MPU_Set_Rate(1000);						       	//设置采样率为1000Hz   
     }else return 1;
  
     ID=MPU_Read_Byte(AK8963_ADDR,MAG_WIA);    			//读取AK8963 ID   
