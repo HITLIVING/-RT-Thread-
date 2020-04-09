@@ -6,8 +6,6 @@
  * Change Logs:
  *  
  * Note:
- * 采样决策需要重构
- * 偏移量的添加
  * 正负换算关系
  */
 
@@ -22,12 +20,10 @@
 #include "drv_ili9341_lcd.h"
 #include "kalman_math.h"
 
-
 //**********************  Gyroscope Data Sheet  **************************//
 rt_int16_t chip_temp;        					//温度
 rt_int16_t orignal_gx,orignal_gy,orignal_gz;    //三轴速度计原始值
 rt_int16_t orignal_ax,orignal_ay,orignal_az;    //三轴加速度计原始值
-
 
 #define OFFSET_SAMPLE_GA 1000					//偏移量计算采样数门限
 float offset_sample_ga = 0.0;					//偏移量计算采样数
@@ -229,10 +225,7 @@ void gyroscope_init(void)
 		
 	/* Init the Kalman Filter on m_Z*/
 	KalmanParamInit(&KalParam_mz,KalParam_mz_LastP,KalParam_mz_Q,KalParam_mz_R);	
-	
-	/* Get the init Angle Z */
-	MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
-	offset_Angle_mz = atan((orignal_my - offset_my)/(orignal_mx - offset_mx));
+
 }
 
 
