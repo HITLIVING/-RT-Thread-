@@ -5,8 +5,7 @@
  *
  * Change Logs:
  *  
- * Note:
- * 正负换算关系
+ * 
  */
 
 #include <rtthread.h>
@@ -39,9 +38,11 @@ float Angle_z = 0;								//Z轴转角输出值
 
 rt_int16_t orignal_mx,orignal_my,orignal_mz;    //三轴磁力计原始值
 
-float offset_mx = (-129.0+93.0)/2.0;			//地磁计X轴零点
-float offset_my = (14.0+244.0)/2.0;				//地磁计Y轴零点
+//Data from Matlab
+float offset_mx = -1.989693;					//地磁计X轴零点
+float offset_my = 108.891639;					//地磁计Y轴零点
 float offset_mz = 0.0;							//地磁计Z轴零点
+float offset_mr = 105.992804/109.830367;		//地磁计圆化比率x/y
 
 #define OFFSET_SAMPLE_MZ (OFFSET_SAMPLE_GA/10)	//地磁计初始角计算采样数门限
 float offset_sample_mz = 0.0;					//偏移量计算采样数
@@ -154,11 +155,50 @@ void gyr_data_deal(void)
 //	printf("%.5f\n",Angle_z);
 }
 
+double mag_AbsAngle_deal(double Angle,rt_int16_t ori_mx,rt_int16_t ori_my)
+{
+	double AbsAngle = 0.0;
+	
+	if(ori_mx>0 && ori_my>0)
+	{
+		AbsAngle = 2*PI - Angle;
+	}
+	else if(ori_mx<0 && ori_my>0)
+	{
+		AbsAngle = PI - Angle;
+	}
+	else if(ori_mx<0 && ori_my<0)
+	{
+		AbsAngle = PI - Angle;
+	}	
+	else if(ori_mx>0 && ori_my<0)
+	{
+		AbsAngle = - Angle;
+	}
+	else if(ori_mx==0 && ori_my>0)
+	{
+		AbsAngle = PI/2.0*3.0;
+	}
+	else if(ori_mx==0 && ori_my<0)
+	{
+		AbsAngle = PI/2.0;
+	}
+	else if(ori_mx<0 && ori_my==0)
+	{
+		AbsAngle = PI;
+	}	
+	
+	return AbsAngle;
+}
+
+
 void mag_sample_dataGet(void)
 {
 	MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
 	
-	Angle_mz = atan((orignal_my - offset_my)/(orignal_mx - offset_mx));
+	Angle_mz = atan(offset_mr*(orignal_my - offset_my)/(orignal_mx - offset_mx));
+	
+	Angle_mz = mag_AbsAngle_deal(Angle_mz,(orignal_mx - offset_mx),(orignal_my - offset_my));
 		
 	offset_Angle_mz+=Angle_mz;
 }
@@ -173,12 +213,14 @@ void mag_data_deal(void)
 {
 	MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
 	
-	Angle_mz = atan((orignal_my - offset_my)/(orignal_mx - offset_mx)) - offset_Angle_mz;
+	Angle_mz = atan(offset_mr*(orignal_my - offset_my)/(orignal_mx - offset_mx));
+	Angle_mz = mag_AbsAngle_deal(Angle_mz,(orignal_mx - offset_mx),(orignal_my - offset_my))- offset_Angle_mz;
 	Angle_mz = Angle_mz/3.1415926*180.0;
 	
 	KalmanParamUpdate(&KalParam_mz, Angle_mz);		
 	
 	printf("%f\n",KalParam_mz.out);
+//	printf("%d,%d,%d\n",orignal_mx,orignal_my,orignal_mz);
 
 }
 
