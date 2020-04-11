@@ -25,11 +25,9 @@
 
 //**********************  User Data Sheet  **************************//
 #define LCD_USING
+#define Angle_180Degree
 
 float GlobalPosition_Angle = 0.0;				//最终全局定位转角
-
-
-
 
 
 //**********************  Gyroscope Data Sheet  **************************//
@@ -48,9 +46,9 @@ float Angle_gz = 0;								//速度计Z轴转角计算值
 rt_int16_t orignal_mx,orignal_my,orignal_mz;    //三轴磁力计原始值
 
 //Data from Matlab
-#define offset_mx  -1.989693					//地磁计X轴零点
-#define offset_my  108.891639					//地磁计Y轴零点
-#define offset_mr  105.992804/109.830367		//地磁计圆化比率x/y
+#define offset_mx  -12.447578					//地磁计X轴零点
+#define offset_my  35.371766					//地磁计Y轴零点
+#define offset_mr  115.544546/124.374368		//地磁计圆化比率x/y
 
 #define OFFSET_SAMPLE_MZ (OFFSET_SAMPLE_GA/10)	//地磁计初始角计算采样数门限
 float offset_sample_mz = 0.0;					//偏移量计算采样数
@@ -179,6 +177,20 @@ void gyr_data_deal(int Debug)
 	KalmanParamUpdate(&KalParam_gz, real_gz);
 	
 	Angle_gz-=KalParam_gz.out*tick_delta*0.001;
+	Angle_gz = fmod(Angle_gz,360.0);
+	
+	//negetive angle changed to positive angle
+	if(Angle_gz < 0)
+	{
+		Angle_gz += 360.0;
+	}
+	
+#ifdef Angle_180Degree	
+	if(Angle_gz > 180.0)
+	{
+		Angle_gz -= 360;
+	}
+#endif
 	
 	if(Debug)
 		printf("%.5f\n",Angle_gz);
@@ -249,22 +261,25 @@ void mag_sample_dataGet(void)
 /**
   * @brief  获取地磁计处理后的角度值
   * @note   经过了Kalman滤波处理
-  * @param  Debug = 1，打印计算后的数值；
-			Debug = 2，打印三个轴的原始数据用于Matlab椭圆拟合；
-			Debug = 0，不打印
+  * @param  Debug = 1，打印计算后的数值
+			Debug = 2，打印三个轴的原始数据用于Matlab椭圆拟合
+			Debug = 3, 打印处理后的数据
+			Debug = 0，不打印		
   * @retval 角度值更新在全局变量 Angle_mz
   */
 void mag_data_deal(int Debug)
 {
 	MPU_Get_Magnetometer(&orignal_mx,&orignal_my,&orignal_mz);
 	
-	KalmanParamUpdate(&KalParam_mx, orignal_mx);		
-	orignal_mx = KalParam_mx.out;
-	KalmanParamUpdate(&KalParam_my, orignal_my);		
-	orignal_my = KalParam_my.out;
+	orignal_mx -= offset_mx;
+	orignal_my -= offset_my;
+	orignal_my *= offset_mr;
 	
-	Angle_mz = atan(offset_mr*(orignal_my - offset_my)/(orignal_mx - offset_mx));
-	Angle_mz = mag_AbsAngle_deal(Angle_mz,(orignal_mx - offset_mx),(orignal_my - offset_my));
+	KalmanParamUpdate(&KalParam_mx, orignal_mx);		
+	KalmanParamUpdate(&KalParam_my, orignal_my);		
+	
+	Angle_mz = atan(KalParam_my.out / KalParam_mx.out);
+	Angle_mz = mag_AbsAngle_deal(Angle_mz,KalParam_mx.out,KalParam_my.out);
 	
 	if(Angle_mz < offset_Angle_mz)
 	{
@@ -276,11 +291,20 @@ void mag_data_deal(int Debug)
 	}
 	
 	Angle_mz = Angle_mz/3.1415926*180.0;
+
+#ifdef Angle_180Degree	
+	if(Angle_mz > 180.0)
+	{
+		Angle_mz -= 360;
+	}
+#endif	
 	
 	if(Debug==1)
 		printf("%f\n",Angle_mz);
 	else if(Debug==2)
 		printf("%d,%d,%d\n",orignal_mx,orignal_my,orignal_mz);
+	else if(Debug==3)
+		printf("%f,%f\n",KalParam_mx.out,KalParam_my.out);
 }
 
 /**
@@ -296,13 +320,18 @@ void GlobalPosition_AngleGet(float Alpha, int Debug)
 {
 	GlobalPosition_Angle = Alpha * Angle_gz + (1-Alpha) * Angle_mz;
 	
+#ifdef Angle_180Degree	
+	if(GlobalPosition_Angle > 180.0)
+	{
+		GlobalPosition_Angle -= 360;
+	}
+#endif
+	
 	if(Debug==1)
 		printf("%f\n",GlobalPosition_Angle);
 	else if(Debug==2)
 		printf("%f,%f,%f\n",Angle_gz,Angle_mz,GlobalPosition_Angle);
 }
-
-
 
 
 #ifdef LCD_USING
