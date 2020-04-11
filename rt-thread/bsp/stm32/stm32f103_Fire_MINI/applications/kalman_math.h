@@ -1,8 +1,6 @@
 #ifndef __KALMAN_MATH_H__
 #define __KALMAN_MATH_H__
 
-#define PI 3.1415926
-
 struct KalmanParam
 {
 	float Last_P;	//上次估算协方差

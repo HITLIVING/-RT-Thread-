@@ -508,6 +508,11 @@
               <FilePath>applications\gyroscope_app.c</FilePath>
             </File>
             <File>
+              <FileName>algorythm_math.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\applications\algorythm_math.c</FilePath>
+            </File>
+            <File>
               <FileName>kalman_math.c</FileName>
               <FileType>1</FileType>
               <FilePath>applications\kalman_math.c</FilePath>

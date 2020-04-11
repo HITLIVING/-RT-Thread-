@@ -19,15 +19,14 @@ enum gyr_state
 
 void gyroscope_init(void);
 void gyr_schedule(void);
-void gyr_offset_cul(void);
-void gyr_data_deal(void);
+void gyr_data_deal(int Debug);
 void gyr_sample_dataGet(void);
-void mag_offset_cul(void);
-void mag_data_deal(void);
+
+void mag_data_deal(int Debug);
 void mag_sample_dataGet(void);
 double mag_AbsAngle_deal(double Angle,rt_int16_t ori_mx,rt_int16_t ori_my);
 
-
+void GlobalPosition_AngleGet(float Alpha, int Debug);
 
 
 
